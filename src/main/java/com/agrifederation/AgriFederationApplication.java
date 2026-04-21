@@ -1,5 +1,6 @@
 package com.agrifederation;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -7,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class AgriFederationApplication {
 
     public static void main(String[] args) {
+        Dotenv.configure().systemProperties().load();
         SpringApplication.run(AgriFederationApplication.class, args);
     }
 

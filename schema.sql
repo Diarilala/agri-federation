@@ -13,4 +13,5 @@ CREATE TABLE member(
     phone_number int NOT NULL,
     email VARCHAR(255) NOT NULL,
     member_occupation occupation_type
+
 );

@@ -39,6 +39,9 @@ paths:
       operationId: createAccount
       parameters:
         - $ref: '#/components/parameters/CollectiviteId'
+  /collectivities:
+    post:
+      description: Create an authorization request.
       requestBody:
         required: true
         content:
@@ -491,6 +494,25 @@ paths:
       parameters:
         - $ref: '#/components/parameters/CollectiviteId'
         - $ref: '#/components/parameters/ActiviteId'
+              $ref: '#/components/schemas/CollectivityCreateRequest'
+      responses:
+        201:
+          description: Request created
+          content:
+            application/json:
+              schema: '#/components/schemas/Collectivity'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        422:
+          $ref: '#/components/responses/UnprocessableEntity'
+
+  /collectivities/{collectivityId}/members:
+    parameters:
+      - $ref: '#/components/parameters/CollectivityId'
+    post:
+      description: Welcoming a new member based on the required condition.
       requestBody:
         required: true
         content:
@@ -771,6 +793,26 @@ paths:
         Mandat de 2 ans. Le dirigeant principal (président de la fédération) doit être ou avoir été
         président d'une collectivité.
       operationId: creerMandatFederation
+              $ref: '#/components/schemas/MemberAdmissionRequest'
+      responses:
+        201:
+          description: Member admitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        422:
+          $ref: '#/components/responses/UnprocessableEntity'
+
+  /collectivities/{collectivityId}/contribution:
+    parameters:
+      - $ref: '#/components/parameters/CollectivityId'
+    post:
+      description: the treasurer record a receipt of a contribution
       requestBody:
         required: true
         content:
@@ -1875,3 +1917,15 @@ components:
         - code
         - message
         - timestamp
+              $ref: '#/components/schemas/ContributionCreateRequest'
+      responses:
+        201:
+          description: Contribution saved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contribution'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'

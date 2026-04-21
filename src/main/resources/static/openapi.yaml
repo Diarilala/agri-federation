@@ -1,9 +1,77 @@
 openapi: 3.1.0
 info:
-  title: Title
-  description: Title
+  title: agri-federation API
+  description: API listing the management side of collectivities, members, activities and finance
   version: 1.0.0
 servers:
   - url: 'http://127.0.0.1:8080'
 paths:
-  /collectivity/create:
+  /collectivities:
+    post:
+      description: Create an authorization request.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CollectivityCreateRequest'
+      responses:
+        201:
+          description: Request created
+          content:
+            application/json:
+              schema: '#/components/schemas/Collectivity'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        422:
+          $ref: '#/components/responses/UnprocessableEntity'
+
+  /collectivities/{collectivityId}/members:
+    parameters:
+      - $ref: '#/components/parameters/CollectivityId'
+    post:
+      description: Welcoming a new member based on the required condition.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemberAdmissionRequest'
+      responses:
+        201:
+          description: Member admitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        422:
+          $ref: '#/components/responses/UnprocessableEntity'
+
+  /collectivities/{collectivityId}/contribution:
+    parameters:
+      - $ref: '#/components/parameters/CollectivityId'
+    post:
+      description: the treasurer record a receipt of a contribution
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContributionCreateRequest'
+      responses:
+        201:
+          description: Contribution saved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contribution'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'

@@ -94,6 +94,6 @@ CREATE TABLE memberPayment(
     payment_mode payment_mode NOT NULL,
     id_membership_fee VARCHAR(255) REFERENCES membership_fee(id),
     account_credited VARCHAR(255) REFERENCES financial_account(id),
-    creationDate TIMESTAMP,
+    creation_date TIMESTAMP,
     id_member VARCHAR(255) REFERENCES member(id)
 );

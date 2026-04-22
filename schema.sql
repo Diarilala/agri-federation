@@ -2,7 +2,6 @@ CREATE TYPE gender_type AS ENUM('MALE', 'FEMALE');
 
 CREATE TYPE occupation_type AS ENUM('JUNIOR', 'SENIOR', 'SECRETARY', 'TREASURER', 'VICE_PRESIDENT', 'PRESIDENT');
 
-drop table member;
 CREATE TABLE member(
     id VARCHAR(255) PRIMARY KEY NOT NULL,
     first_name VARCHAR(255) NOT NULL,

@@ -65,7 +65,7 @@ public class CollectivityRepository {
 
     public Collectivity findById(Integer id) {
         String query = """
-                SELECT id, location, specialty, federation_approval, approval_date, created_at
+                SELECT id, location, specialty, federation_approval, approval_date, created_at, unique_number, unique_name
                 FROM collectivity
                 WHERE id = ?
                 """;
@@ -80,6 +80,8 @@ public class CollectivityRepository {
                 collectivity.setFederationApproval(resultSet.getBoolean("federation_approval"));
                 collectivity.setApprovalDate(resultSet.getTimestamp("approval_date").toLocalDateTime());
                 collectivity.setCreatedAt(resultSet.getTimestamp("created_at").toLocalDateTime());
+                collectivity.setUniqueNumber(resultSet.getString("unique_number"));
+                collectivity.setUniqueName(resultSet.getString("unique_name"));
                 return collectivity;
 
             }
@@ -145,5 +147,7 @@ public class CollectivityRepository {
             throw new RuntimeException(e);
         }
     }
-    }
+
+
+}
 

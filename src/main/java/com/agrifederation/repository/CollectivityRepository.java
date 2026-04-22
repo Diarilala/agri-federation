@@ -112,5 +112,38 @@ public class CollectivityRepository {
         throw new RuntimeException(e);}
     return collectivityList;
     }
+
+    public boolean existsByUniqueNumber(String uniqueNumber) {
+        String query = """
+                SELECT 1
+                FROM collectivity
+                WHERE unique_number = ?
+        """;
+        try(Connection connection = databaseConfig.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(query)){
+            preparedStatement.setString(1, uniqueNumber);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return resultSet.next();
+    }
+        catch (SQLException e) {
+        throw new RuntimeException(e);}
+    }
+
+    public boolean existsByUniqueName(String uniqueName) {
+        String query = """
+                SELECT 1
+                FROM collectivity
+                WHERE unique_name = ?
+        """;
+        try(Connection connection = databaseConfig.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(query)){
+            preparedStatement.setString(1, uniqueName);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return resultSet.next();
+        }
+        catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
     }
 

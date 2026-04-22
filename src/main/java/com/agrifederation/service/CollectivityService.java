@@ -41,7 +41,7 @@ public class CollectivityService {
     public Collectivity getCollectivity(Integer id) {
         Collectivity collectivity = collectivityRepository.findById(id);
         if (collectivity == null) {
-            throw new NotFoundException("Collectivity with id " + id + " not found");
+            throw new NotFoundException("Collectivity with id " + id + " is nowhere to be found");
         }
         return collectivity;
     }
@@ -51,6 +51,14 @@ public class CollectivityService {
         return collectivities;
     }
 
+    public Collectivity updateCollectivity(Integer id, String name, Integer number) {
+        Collectivity existsCollectivity = collectivityRepository.findById(id);
+        if (existsCollectivity == null) {
+            throw new NotFoundException("Collectivity with id " + id + " is nowhere to be found");
+        }
+
+        throw new RuntimeException("Not implemented yet");
+    }
 
 
 }

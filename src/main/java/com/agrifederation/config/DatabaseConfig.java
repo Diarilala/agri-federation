@@ -1,12 +1,12 @@
 package com.agrifederation.config;
 
-import io.github.cdimascio.dotenv.Dotenv;
+import org.springframework.context.annotation.Configuration;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+@Configuration
 public class DatabaseConfig {
     public Connection getConnection() {
         try {

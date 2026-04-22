@@ -148,6 +148,61 @@ public class CollectivityRepository {
         }
     }
 
+    public Collectivity findByUniqueNumber(String uniqueNumber) {
+        String query = """
+                SELECT id, location, specialty, federation_approval, approval_date, created_at,
+                            unique_number, unique_name
+                FROM collectivity
+                WHERE unique_number = ?
+        """;
+        try(Connection connection = databaseConfig.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                Collectivity collectivity = new Collectivity();
+                collectivity.setId(resultSet.getString("id"));
+                collectivity.setLocation(resultSet.getString("location"));
+                collectivity.setSpeciality(resultSet.getString("specialty"));
+                collectivity.setFederationApproval(resultSet.getBoolean("federation_approval"));
+                collectivity.setApprovalDate(resultSet.getTimestamp("approval_date").toLocalDateTime());
+                collectivity.setCreatedAt(resultSet.getTimestamp("created_at").toLocalDateTime());
+                collectivity.setUniqueNumber(resultSet.getString("unique_number"));
+                collectivity.setUniqueName(resultSet.getString("unique_name"));
+                return collectivity;
+            }
+        }
+        catch (SQLException e) {
+        throw new RuntimeException(e);}
+        return null;
+    }
 
+    public Collectivity findByUniqueName(String uniqueName) {
+        String query = """
+                SELECT id, location, specialty, federation_approval, approval_date, created_at,
+                unique_number, unique_name
+                FROM collectivity
+                WHERE unique_name = ?
+        """;
+        try (Connection connection = databaseConfig.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(query)){
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                Collectivity collectivity = new Collectivity();
+                collectivity.setId(resultSet.getString("id"));
+                collectivity.setLocation(resultSet.getString("location"));
+                collectivity.setSpeciality(resultSet.getString("specialty"));
+                collectivity.setFederationApproval(resultSet.getBoolean("federation_approval"));
+                collectivity.setApprovalDate(resultSet.getTimestamp("approval_date").toLocalDateTime());
+                collectivity.setCreatedAt(resultSet.getTimestamp("created_at").toLocalDateTime());
+                collectivity.setUniqueNumber(resultSet.getString("unique_number"));
+                collectivity.setUniqueName(resultSet.getString("unique_name"));
+                return collectivity;
+            }
+        }
+        catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
 }
 

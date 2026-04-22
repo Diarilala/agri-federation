@@ -57,6 +57,7 @@ public class CollectivityService {
             throw new NotFoundException("Collectivity with id " + id + " is nowhere to be found");
         }
 
+
         throw new RuntimeException("Not implemented yet");
     }
 

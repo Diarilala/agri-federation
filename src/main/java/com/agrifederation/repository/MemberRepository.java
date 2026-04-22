@@ -59,13 +59,13 @@ public class MemberRepository {
                     ResultSet rs = memberStmt.executeQuery();
                     if(rs.next()) {
                         String returnedId = rs.getString("id");
-                        member.setId(returnedId);
+                        member.setMemberIdentifier(returnedId);
                         members.add(member);
 
                         if(member.getReferrals() != null || !member.getReferrals().isEmpty()){
                             for(Referral referral : member.getReferrals()){
                                 referralStmt.setString(1, UUID.randomUUID().toString());
-                                referralStmt.setString(2, referral.getReferee().getId());
+                                referralStmt.setString(2, referral.getReferee().getMemberIdentifier());
                                 referralStmt.setString(3, returnedId);
                                 referralStmt.addBatch();
                             }

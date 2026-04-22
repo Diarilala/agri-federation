@@ -4,17 +4,14 @@ import com.agrifederation.entity.Member;
 import com.agrifederation.exception.BadRequestException;
 import com.agrifederation.repository.MemberRepository;
 import com.agrifederation.validator.MemberValidator;
-import lombok.Data;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Data
+@AllArgsConstructor
 @RestController
 @RequestMapping("/members")
 public class MemberController {

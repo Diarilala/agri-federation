@@ -97,4 +97,6 @@ public class MemberRepository {
             throw new RuntimeException(e);
         }
     }
+
+
 }

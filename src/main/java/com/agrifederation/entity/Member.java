@@ -23,6 +23,7 @@ public class Member {
     private String email;
     private Occupation occupation;
     private String collectivityIdentifier;
+    private Referral referral;
     private boolean registrationFeePaid;
     private boolean membershipDuesPaid;
 }

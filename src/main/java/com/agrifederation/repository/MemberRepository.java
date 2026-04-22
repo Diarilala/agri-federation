@@ -25,7 +25,8 @@ public class MemberRepository {
                 INSERT INTO member (id, first_name, last_name,
                                      birth_date, gender, address,
                                      profession, phone_number, email,
-                                     member_occupation) VALUES (?, ?, ?, ?, ?::gender_type, ?, ?, ?, ?, ?::occupation_type)
+                                     member_occupation, id_collectivity, registration_fee_paid,
+                                    membership_dues_paid) VALUES (?, ?, ?, ?, ?::gender_type, ?, ?, ?, ?, ?::occupation_type,?, ?, ?)
                 """;
 
         try (Connection connection = databaseConfig.getConnection()) {
@@ -42,10 +43,11 @@ public class MemberRepository {
                 preparedStatement.setInt(8, member.getPhoneNumber());
                 preparedStatement.setString(9, member.getEmail());
                 preparedStatement.setString(10, member.getOccupation().name());
-
+                preparedStatement.setString(11, member.getCollectivityIdentifier());
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return members;
     }
 }

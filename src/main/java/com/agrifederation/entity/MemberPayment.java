@@ -13,6 +13,7 @@ public class MemberPayment {
     private String membershipFeeIdentifier;
     private String accountCreditedIdentifier;
     private FinancialAccount accountCredited;
+    private MembershipFee membershipFee;
     private Instant creationDate;
     private Member member;
 }

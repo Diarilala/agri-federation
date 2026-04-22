@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 
 public class Member {
+    private String id;
     private String firstName;
     private String lastName;
     private LocalDate birthDate;

@@ -1,9 +1,12 @@
 package com.agrifederation.config;
 
+import org.springframework.context.annotation.Configuration;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+@Configuration
 public class DatabaseConfig {
     public Connection getConnection() {
         try {

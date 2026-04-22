@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,7 +43,7 @@ public class CollectivityRepository {
     }
 
     //check if collectivity exists
-    public boolean CollectivityExists(Collectivity collectivity) {
+    public boolean CollectivityExists(String collectivityIdentifier) {
         String query = """
                 SELECT id
                 FROM collectivity
@@ -52,9 +51,11 @@ public class CollectivityRepository {
         """;
         try (Connection connection = databaseConfig.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(query);){
-            preparedStatement.setString(1, collectivity.getId());
+            preparedStatement.setString(1, collectivityIdentifier);
             ResultSet resultSet = preparedStatement.executeQuery();
-            return resultSet.next();
+            if (resultSet.next()) {
+                return true;
+            }
         }
         catch (SQLException e) {
             throw new RuntimeException(e);

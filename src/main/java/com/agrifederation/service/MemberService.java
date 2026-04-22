@@ -3,6 +3,7 @@ package com.agrifederation.service;
 import com.agrifederation.entity.Member;
 import com.agrifederation.exception.BadRequestException;
 import com.agrifederation.exception.NotFoundException;
+import com.agrifederation.repository.CollectivityRepository;
 import com.agrifederation.repository.MemberRepository;
 import lombok.Data;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class MemberService {
 
     public List<Member> createMembers(List<Member> givenMemberList) {
         for(Member member : givenMemberList) {
-            if(!collectivityRepository.collectivityExists(member.getCollectivityIdentifier())) {
+            if(!collectivityRepository.CollectivityExists(member.getCollectivityIdentifier())) {
                 throw new NotFoundException("Collectivity Not Found: " + member.getCollectivityIdentifier());
             }
             if(!memberRepository.memberExists(member.getId())){

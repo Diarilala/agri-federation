@@ -8,7 +8,7 @@ import java.time.Instant;
 @Data
 public class MemberPayment {
     private String id;
-    private int amount;
+    private float amount;
     private PaymentMode paymentMode;
     private String membershipFeeIdentifier;
     private String accountCreditedIdentifier;

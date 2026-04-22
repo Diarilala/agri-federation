@@ -40,3 +40,12 @@ ADD COLUMN registration_fee_paid BOOLEAN NOT NULL;
 
 ALTER TABLE member
 ADD COLUMN membership_dues_paid BOOLEAN NOT NULL;
+
+CREATE TYPE payment_mode AS ENUM('CASH','MOBILE_BANKING','BANK_TRANSFER');
+
+CREATE TABLE memberPayment(
+    id VARCHAR(255) PRIMARY KEY NOT NULL,
+    amount FLOAT,
+    payment_mode payment_mode NOT NULL,
+
+)

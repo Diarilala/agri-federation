@@ -3,6 +3,7 @@ package com.agrifederation.controller;
 import com.agrifederation.entity.Member;
 import com.agrifederation.exception.BadRequestException;
 import com.agrifederation.repository.MemberRepository;
+import com.agrifederation.validator.MemberValidator;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +20,13 @@ import java.util.List;
 public class MemberController {
 
     private final MemberRepository memberRepository;
+    private final MemberValidator memberValidator;
 
     @PostMapping
     public ResponseEntity<?> createMembers(@RequestBody List<Member> givenMemberList) {
         List<Member> memberList;
         try {
+            memberValidator.validateMemberList(givenMemberList);
             memberList = memberRepository.createMembers(givenMemberList);
         } catch(BadRequestException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

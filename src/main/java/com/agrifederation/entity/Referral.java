@@ -10,3 +10,5 @@ public class Referral {
     private Member referee;
     private Member referred;
 }
+
+

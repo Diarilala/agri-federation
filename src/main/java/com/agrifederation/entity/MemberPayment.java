@@ -14,4 +14,5 @@ public class MemberPayment {
     private String accountCreditedIdentifier;
     private FinancialAccount accountCredited;
     private Instant creationDate;
+    private Member member;
 }

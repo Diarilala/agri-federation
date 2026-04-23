@@ -57,6 +57,15 @@ public class CollectivityService {
             throw new NotFoundException("Collectivity with id " + id + " is nowhere to be found");
         }
 
+        if(existsCollectivity.getUniqueName() != null && name != null && !name.equals(existsCollectivity.getUniqueName())) {
+            throw new BadRequestException("Collectivity name and/or unique name are not match");
+        }
+
+        if(existsCollectivity.getUniqueNumber() != null && number != null && !number.equals(existsCollectivity.getUniqueNumber())) {
+            throw new BadRequestException("Number and/or unique number are not match");
+        }
+
+
 
         throw new RuntimeException("Not implemented yet");
     }

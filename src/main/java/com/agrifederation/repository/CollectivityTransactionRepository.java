@@ -16,7 +16,7 @@ import java.util.List;
 public class CollectivityTransactionRepository {
     private final DatabaseConfig databaseConfig;
 
-    public List<CollectivityTransaction> findCollectivityTransaction(String collectivityId, LocalDate fromDate, LocalDate toDate, LocalDate dateFrom, LocalDate dateTo) {
+    public List<CollectivityTransaction> findCollectivityTransaction(String collectivityId, LocalDate fromDate, LocalDate toDate) {
         List<CollectivityTransaction> collectivityTransactions = new ArrayList<>();
         String query = """
                 SELECT ct.id,

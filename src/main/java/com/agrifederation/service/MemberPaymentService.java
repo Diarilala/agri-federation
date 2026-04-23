@@ -19,7 +19,6 @@ public class MemberPaymentService {
     public List<MemberPaymentDTO> createPayments(List<MemberPayment> givenMemberPaymentList, String memberIdentifier) {
         List<MemberPaymentDTO> memberPaymentDTOList = new ArrayList<>();
         List<MemberPayment> memberPaymentList = memberPaymentRepository.createMemberPayments(givenMemberPaymentList);
-        if(!memberPayment)
-        return memberPaymentDTOList;
+        return memberPaymentList;
     }
 }

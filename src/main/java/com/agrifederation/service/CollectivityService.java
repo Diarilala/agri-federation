@@ -58,11 +58,11 @@ public class CollectivityService {
         }
 
         if(existsCollectivity.getUniqueName() != null && name != null && !name.equals(existsCollectivity.getUniqueName())) {
-            throw new BadRequestException("Collectivity name and/or unique name are not match");
+            throw new BadRequestException("Modifying unique name " + existsCollectivity.getUniqueName() + " is not allowed");
         }
 
         if(existsCollectivity.getUniqueNumber() != null && number != null && !number.equals(existsCollectivity.getUniqueNumber())) {
-            throw new BadRequestException("Number and/or unique number are not match");
+            throw new BadRequestException("modifying number " + existsCollectivity.getUniqueNumber() + " is not allowed");
         }
 
 

@@ -97,3 +97,13 @@ CREATE TABLE memberPayment(
     creation_date TIMESTAMP,
     id_member VARCHAR(255) REFERENCES member(id)
 );
+
+CREATE TABLE IF NOT EXISTS collectivity_transaction (
+    id VARCHAR(150) PRIMARY KEY DEFAULT gen_random_uuid(),
+    creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    amount DECIMAL(10,2) NOT NULL,
+    payment_mode VARCHAR(50) NOT NULL,
+    account_credited_id VARCHAR(150) NOT NULL,
+    account_credited_type VARCHAR(150) NOT NULL,
+    member_debited_id VARCHAR(150) NOT NULL references member(id)
+);

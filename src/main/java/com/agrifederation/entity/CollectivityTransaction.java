@@ -2,17 +2,19 @@ package com.agrifederation.entity;
 
 import com.agrifederation.enums.ActivityStatus;
 import com.agrifederation.enums.Frequency;
+import com.agrifederation.enums.PaymentMode;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 public class CollectivityTransaction {
-    private String id;
-    private ActivityStatus status;
-    private LocalDateTime eligibleDate;
-    private Frequency frequency;
+     private String id;
+    private LocalDate creationDate;
     private Double amount;
-    private String description;
-    private String collectivityId;
+    private PaymentMode paymentMode;
+    private String accountCreditedId;
+    private FinancialAccount accountCredited;
+    private String memberDebitedId;
+    private Member memberDebited;
 }

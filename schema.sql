@@ -65,12 +65,20 @@ CREATE TYPE mobile_banking_service AS ENUM('ORANGE_MONEY', 'MVOLA', 'AIRTEL_MONE
 CREATE TABLE financial_account(
     id VARCHAR(255) PRIMARY KEY,
     type account_type NOT NULL,
-    amount FLOAT NOT NULL
 );
 
 CREATE TABLE cash_account(
     id VARCHAR(255) PRIMARY KEY REFERENCES financial_account(id)
 );
+
+ALTER TABLE cash_account
+ADD COLUMN amount FLOAT NOT NULL default 0;
+
+ALTER TABLE bank_account
+ADD COLUMN amount FLOAT NOT NULL default 0;
+
+ALTER TABLE mobile_banking_account
+ADD COLUMN amount FLOAT NOT NULL default 0;
 
 CREATE TABLE bank_account(
     id VARCHAR(255) PRIMARY KEY REFERENCES financial_account(id),

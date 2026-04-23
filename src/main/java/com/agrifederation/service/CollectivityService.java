@@ -41,7 +41,7 @@ public class CollectivityService {
     public Collectivity getCollectivity(Integer id) {
         Collectivity collectivity = collectivityRepository.findById(id);
         if (collectivity == null) {
-            throw new NotFoundException("Collectivity with id " + id + " not found");
+            throw new NotFoundException("Collectivity with id " + id + " is nowhere to be found");
         }
         return collectivity;
     }
@@ -51,6 +51,31 @@ public class CollectivityService {
         return collectivities;
     }
 
+    public Collectivity updateCollectivity(Integer id, String name, Integer number) {
+        Collectivity existsCollectivity = collectivityRepository.findById(id);
+        if (existsCollectivity == null) {
+            throw new NotFoundException("Collectivity with id " + id + " is nowhere to be found");
+        }
+
+        if(existsCollectivity.getUniqueName() != null && name != null && !name.equals(existsCollectivity.getUniqueName())) {
+            throw new BadRequestException("Modifying unique name " + existsCollectivity.getUniqueName() + " is not allowed");
+        }
+
+        if(existsCollectivity.getUniqueNumber() != null && number != null && !number.equals(existsCollectivity.getUniqueNumber())) {
+            throw new BadRequestException("modifying number " + existsCollectivity.getUniqueNumber() + " is not allowed");
+        }
+        if(existsCollectivity.getUniqueName() != null && name != null && !name.equals(existsCollectivity.getUniqueName())) {
+            throw new BadRequestException("Collectivity name and/or unique name are not match");
+        }
+
+        if(existsCollectivity.getUniqueNumber() != null && number != null && !number.equals(existsCollectivity.getUniqueNumber())) {
+            throw new BadRequestException("Number and/or unique number are not match");
+        }
+
+
+
+        throw new RuntimeException("Not implemented yet");
+    }
 
 
 }

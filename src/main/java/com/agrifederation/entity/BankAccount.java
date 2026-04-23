@@ -12,4 +12,5 @@ public class BankAccount extends FinancialAccount{
     private int bankCode;
     private int bankBranchCode;
     private int bankAccountKey;
+    private float amount;
 }

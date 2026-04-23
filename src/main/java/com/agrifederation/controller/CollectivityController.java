@@ -1,7 +1,10 @@
 package com.agrifederation.controller;
 
 import com.agrifederation.config.DatabaseConfig;
+import com.agrifederation.dto.CollectivityInformationDTO;
 import com.agrifederation.entity.Collectivity;
+import com.agrifederation.exception.BadRequestException;
+import com.agrifederation.exception.NotFoundException;
 import com.agrifederation.repository.CollectivityRepository;
 import com.agrifederation.service.CollectivityService;
 import lombok.Data;
@@ -30,9 +33,9 @@ public class CollectivityController {
                 .body(created);
     }
 
-    @GetMapping
-    public ResponseEntity<Collectivity> getCollectivityById(@RequestParam Integer id) {
-        Collectivity collectivity = collectivityService.getCollectivity(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<Collectivity> getCollectivityById(@RequestParam String id) {
+        Collectivity collectivity = collectivityService.getCollectivity(Integer.valueOf(id));
         return ResponseEntity.ok(collectivity);
     }
 
@@ -41,5 +44,26 @@ public class CollectivityController {
         List<Collectivity> collectivities = collectivityService.getAllCollectivities();
         return ResponseEntity.ok(collectivities);
     }
+
+    @PutMapping("/{id}/informations")
+    public ResponseEntity<?> updateCollectivity(@PathVariable String id, @RequestBody CollectivityInformationDTO  collectivityInformationDTO) {
+        try {
+            Collectivity updated = collectivityService.updateCollectivity(Integer.valueOf(id), collectivityInformationDTO.getName(), collectivityInformationDTO.getNumber());
+            return ResponseEntity.ok(updated);
+        } catch (NotFoundException e) {
+            return  ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(e.getMessage());
+        }
+        catch (BadRequestException e) {
+            return  ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        }
+        catch (Exception e) {
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(e.getMessage());
+        }
+    }
+
+
 
 }

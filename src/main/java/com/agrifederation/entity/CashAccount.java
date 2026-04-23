@@ -6,5 +6,5 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper=true)
 public class CashAccount extends FinancialAccount {
-    private float amount;s
+    private float amount;
 }

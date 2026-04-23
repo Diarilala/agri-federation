@@ -27,6 +27,10 @@ public class MemberPaymentRepository {
                 id_member) VALUES (?, ?, ?::payment_mode, ?, ?, ?, ?)
                 RETURNING id;
                 """;
+
+        String createCollectivityTransaction = """
+                INSERT INTO
+                """
         try (Connection connection = databaseConfig.getConnection()) {
             connection.setAutoCommit(false);
             try (PreparedStatement memberPaymentStmt = connection.prepareStatement(memberPaymentQuery)){

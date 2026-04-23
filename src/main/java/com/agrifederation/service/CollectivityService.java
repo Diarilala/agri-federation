@@ -79,7 +79,7 @@ public class CollectivityService {
             }
         }
 
-        throw new RuntimeException("Not implemented yet");
+        return updateCollectivity(id, name, number);
     }
 
 

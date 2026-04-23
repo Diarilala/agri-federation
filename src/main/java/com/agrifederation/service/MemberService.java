@@ -21,14 +21,14 @@ public class MemberService {
             if(!collectivityRepository.CollectivityExists(member.getCollectivityIdentifier())) {
                 throw new NotFoundException("Collectivity Not Found: " + member.getCollectivityIdentifier());
             }
-            if(!memberRepository.memberExists(member.getId())){
-                throw new NotFoundException("Member Not Found: " + member.getId());
+            if(!memberRepository.memberExists(member.getMemberIdentifier())){
+                throw new NotFoundException("Member Not Found: " + member.getMemberIdentifier());
             }
             if(!member.isRegistrationFeePaid()) {
-                throw new BadRequestException("Member Not Found: " + member.getId());
+                throw new BadRequestException("Registration Fee Not Paid");
             }
             if (!member.isMembershipDuesPaid()) {
-                throw new BadRequestException("Member Not Found: " + member.getId());
+                throw new BadRequestException("Membership Dues Not Paid");
             }
         }
         return memberRepository.createMembers(givenMemberList);

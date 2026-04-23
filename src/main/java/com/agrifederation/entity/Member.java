@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 
 public class Member {
-    private String id;
+    private String memberIdentifier;
     private String firstName;
     private String lastName;
     private LocalDate birthDate;
@@ -27,4 +27,5 @@ public class Member {
     private List<Referral> referrals;
     private boolean registrationFeePaid;
     private boolean membershipDuesPaid;
+    private List<MemberPayment> memberPayments;
 }

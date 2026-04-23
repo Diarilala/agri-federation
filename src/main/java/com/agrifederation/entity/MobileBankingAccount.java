@@ -10,4 +10,5 @@ public class MobileBankingAccount extends FinancialAccount {
     private String holderName;
     private MobileBankingService mobileBankingService;
     private String mobileNumber;
+    private float amount;
 }

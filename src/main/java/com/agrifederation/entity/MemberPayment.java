@@ -15,5 +15,4 @@ public class MemberPayment {
     private FinancialAccount accountCredited;
     private MembershipFee membershipFee;
     private Instant creationDate;
-    private Member member;
 }

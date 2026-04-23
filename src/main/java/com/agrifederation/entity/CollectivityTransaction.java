@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 @Data
 public class CollectivityTransaction {
-     private String id;
+    private String id;
     private LocalDate creationDate;
     private Double amount;
     private PaymentMode paymentMode;

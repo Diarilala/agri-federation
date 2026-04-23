@@ -64,22 +64,17 @@ public class CollectivityService {
         if(existsCollectivity.getUniqueNumber() != null && number != null && !number.equals(existsCollectivity.getUniqueNumber())) {
             throw new BadRequestException("modifying number " + existsCollectivity.getUniqueNumber() + " is not allowed");
         }
-
-        if(name !=null && collectivityRepository.existsByUniqueName(name)) {
-            Collectivity collectivityName = collectivityRepository.findByUniqueName(name);
-            if(collectivityName != null && !collectivityName.getId().equals(id)) {
-                throw new BadRequestException("Collectivity with name " + name + " already exists");
-            }
+        if(existsCollectivity.getUniqueName() != null && name != null && !name.equals(existsCollectivity.getUniqueName())) {
+            throw new BadRequestException("Collectivity name and/or unique name are not match");
         }
 
-        if (number != null && collectivityRepository.existsByUniqueNumber(String.valueOf(number))) {
-            Collectivity collectivityNumber = collectivityRepository.findByUniqueNumber(String.valueOf(number));
-            if(collectivityNumber != null && !collectivityNumber.getId().equals(id)) {
-                throw new BadRequestException("Collectivity with number " + number + " already exists");
-            }
+        if(existsCollectivity.getUniqueNumber() != null && number != null && !number.equals(existsCollectivity.getUniqueNumber())) {
+            throw new BadRequestException("Number and/or unique number are not match");
         }
 
-        return updateCollectivity(id, name, number);
+
+
+        throw new RuntimeException("Not implemented yet");
     }
 
 

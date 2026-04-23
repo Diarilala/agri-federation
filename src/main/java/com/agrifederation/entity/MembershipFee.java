@@ -15,6 +15,5 @@ public class MembershipFee {
     private Frequency frequency;
     private float amount;
     private String label;
-    private
     private List<MemberPayment> memberPayments;
 }

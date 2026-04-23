@@ -65,7 +65,19 @@ public class CollectivityService {
             throw new BadRequestException("modifying number " + existsCollectivity.getUniqueNumber() + " is not allowed");
         }
 
+        if(name !=null && collectivityRepository.existsByUniqueName(name)) {
+            Collectivity collectivityName = collectivityRepository.findByUniqueName(name);
+            if(collectivityName != null && !collectivityName.getId().equals(id)) {
+                throw new BadRequestException("Collectivity with name " + name + " already exists");
+            }
+        }
 
+        if (number != null && collectivityRepository.existsByUniqueNumber(String.valueOf(number))) {
+            Collectivity collectivityNumber = collectivityRepository.findByUniqueNumber(String.valueOf(number));
+            if(collectivityNumber != null && !collectivityNumber.getId().equals(id)) {
+                throw new BadRequestException("Collectivity with number " + number + " already exists");
+            }
+        }
 
         throw new RuntimeException("Not implemented yet");
     }

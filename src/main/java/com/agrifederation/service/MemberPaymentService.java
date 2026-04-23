@@ -16,7 +16,7 @@ public class MemberPaymentService {
     private final MemberPaymentRepository memberPaymentRepository;
     private final CollectivityTransactionRepository collectivityTransactionRepository;
 
-    public List<MemberPaymentDTO> createPayments(List<MemberPayment> givenMemberPaymentList, String memberIdentifier) {
+    public List<MemberPayment> createPayments(List<MemberPayment> givenMemberPaymentList, String memberIdentifier) {
         List<MemberPaymentDTO> memberPaymentDTOList = new ArrayList<>();
         List<MemberPayment> memberPaymentList = memberPaymentRepository.createMemberPayments(givenMemberPaymentList);
         return memberPaymentList;

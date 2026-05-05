@@ -20,7 +20,7 @@ public class MemberPaymentController {
 
     @PostMapping("/members/{id}/payments")
     public ResponseEntity<?> createPayments(@RequestBody List<MemberPayment> givenMemberPaymentList, @PathVariable String id) {
-        List<MemberPaymentDTO> paymentList;
+        List<MemberPayment> paymentList;
         CollectivityTransaction collectivityTransaction = new CollectivityTransaction();
         try {
             paymentList = memberPaymentService.createPayments(givenMemberPaymentList, id);

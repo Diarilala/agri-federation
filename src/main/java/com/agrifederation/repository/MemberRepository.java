@@ -44,7 +44,7 @@ public class MemberRepository {
                 for (Member member : givenMembersList) {
                     memberStmt.setString(1, UUID.randomUUID().toString());
                     memberStmt.setString(2, member.getFirstName());
-                    memberStmt.setString(3, member.getLastName());
+                        memberStmt.setString(3, member.getLastName());
                     memberStmt.setString(4, member.getBirthDate().toString());
                     memberStmt.setString(5, member.getGender().name());
                     memberStmt.setString(6, member.getAddress());
@@ -53,7 +53,7 @@ public class MemberRepository {
                     memberStmt.setString(9, member.getEmail());
                     memberStmt.setString(10, member.getOccupation().name());
                     memberStmt.setString(11, member.getCollectivityIdentifier());
-                    memberStmt.setBoolean(12, member.isRegistrationFeePaid());
+                      memberStmt.setBoolean(12, member.isRegistrationFeePaid());
                     memberStmt.setBoolean(13, member.isMembershipDuesPaid());
 
                     ResultSet rs = memberStmt.executeQuery();

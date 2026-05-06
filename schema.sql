@@ -119,6 +119,22 @@ CREATE TABLE IF NOT EXISTS collectivity_transaction (
 );
 
 
+CREATE TABLE IF NOT EXISTS collectivity_activity (
+    id VARCHAR(50) PRIMARY KEY,
+    collectivity_id VARCHAR(50) NOT NULL REFERENCES collectivity(id),
+    label VARCHAR(255) NOT NULL,
+    activity_type activity_type NOT NULL,
+    member_occupation_concerned VARCHAR(100),
+    week_ordinal INTEGER CHECK ( week_ordinal BETWEEN 1 AND 5),
+    day_of_week day_of_week,
+    executive_date DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT check_recurrence_or_date CHECK (
+        (week_ordinal IS NOT NULL AND day_of_week IS NOT NULL AND executive_date IS NULL) OR
+        (week_ordinal IS NULL AND day_of_week IS NULL AND executive_date IS NOT NULL)
+    )
+);
+
 alter table cash_account add column amount FLOAT not null default 0;
 
 

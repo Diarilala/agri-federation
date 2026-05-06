@@ -3,13 +3,11 @@ package com.agrifederation.repository;
 import com.agrifederation.config.DatabaseConfig;
 import com.agrifederation.entity.Member;
 import com.agrifederation.entity.Referral;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
@@ -17,6 +15,7 @@ import java.util.UUID;
 
 @Repository
 @Data
+@AllArgsConstructor
 
 public class MemberRepository {
     private final DatabaseConfig databaseConfig;
@@ -45,7 +44,7 @@ public class MemberRepository {
                     memberStmt.setString(1, UUID.randomUUID().toString());
                     memberStmt.setString(2, member.getFirstName());
                     memberStmt.setString(3, member.getLastName());
-                    memberStmt.setString(4, member.getBirthDate().toString());
+                    memberStmt.setDate(4, Date.valueOf(member.getBirthDate()));
                     memberStmt.setString(5, member.getGender().name());
                     memberStmt.setString(6, member.getAddress());
                     memberStmt.setString(7, member.getProfession());
@@ -92,10 +91,14 @@ public class MemberRepository {
         PreparedStatement stmt = connection.prepareStatement(query)){
             stmt.setString(1, memberId);
             ResultSet resultSet = stmt.executeQuery();
-            return resultSet.next();
+            if(resultSet.next()) {
+                String id =  resultSet.getString("id");
+                return true;
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return false;
     }
 
 

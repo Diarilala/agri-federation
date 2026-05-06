@@ -13,7 +13,7 @@ public class DatabaseConfig {
             String url = System.getenv("SPRING_DATASOURCE_URL");
             String username = System.getenv("SPRING_DATASOURCE_USERNAME");
             String password = System.getenv("SPRING_DATASOURCE_PASSWORD");
-            return DriverManager.getConnection(url, username, password);
+            return DriverManager.getConnection("jdbc:postgresql://localhost:5432/agri_federation", "postgres", "lavorary");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

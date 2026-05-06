@@ -19,7 +19,6 @@ public class MemberPaymentRepository {
     private final DatabaseConfig databaseConfig;
     private final CollectivityTransactionRepository collectivityTransactionRepository;
     private final CollectivityService collectivityService;
-    private final MemberPaymentService memberPaymentService;
 
     public List<MemberPayment> createMemberPayments(List<MemberPayment> givenMemberPaymentList) {
         List<MemberPayment> memberPaymentList = new ArrayList<>();

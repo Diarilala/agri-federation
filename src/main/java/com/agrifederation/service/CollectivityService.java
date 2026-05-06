@@ -6,6 +6,7 @@ import com.agrifederation.exception.BadRequestException;
 import com.agrifederation.exception.NotFoundException;
 import com.agrifederation.repository.CollectivityRepository;
 import com.agrifederation.repository.MemberRepository;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.stereotype.Service;
 
@@ -14,14 +15,12 @@ import java.util.List;
 
 @Service
 @Data
+@AllArgsConstructor
+
 public class CollectivityService {
     private final CollectivityRepository collectivityRepository;
     private final MemberRepository memberRepository;
 
-    public CollectivityService(CollectivityRepository collectivityRepository, MemberRepository memberRepository) {
-        this.collectivityRepository = collectivityRepository;
-        this.memberRepository = memberRepository;
-    }
 
     public List<Collectivity> createCollectivities(List<Collectivity> collectivities) {
         List<Collectivity> newCollectivities = new ArrayList<>();

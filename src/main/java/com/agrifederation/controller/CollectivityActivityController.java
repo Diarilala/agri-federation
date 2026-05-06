@@ -14,7 +14,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/collectivities")
 public class CollectivityActivityController {
-
     private final CollectivityActivityService collectivityActivityService;
 
     @PostMapping("/{id}/activities")

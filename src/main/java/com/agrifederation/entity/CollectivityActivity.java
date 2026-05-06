@@ -11,6 +11,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class CollectivityActivity {
+    private String id;
     private String label;
     private Type activityType;
     private List<Occupation> memberOccupationConcerned;

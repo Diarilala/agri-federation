@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,7 +33,7 @@ public class CollectivityActivityRepository {
                 INSERT INTO monthly_recurrence_rule(id, week_ordinal, day_of_week)
                 VALUES(?, ?, ?::days)
                 """;
-
+        List<CollectivityActivity> addedActivityList = new ArrayList<>();
         try (Connection connection = databaseConfig.getConnection()) {
             connection.setAutoCommit(false);
             try (PreparedStatement activityStmt = connection.prepareStatement(activityQuery);
@@ -59,6 +60,9 @@ public class CollectivityActivityRepository {
                     activityStmt.setString(6, recurrenceId);
                     ResultSet resultSet = activityStmt.executeQuery();
                     while (resultSet.next()) {
+                        CollectivityActivity collectivityActivity = new CollectivityActivity();
+                        collectivityActivity.setId(resultSet.getString("id"));
+                        addedActivityList.add(collectivityActivity);
                         String returnedId = resultSet.getString("id_activity");
                         if(activity.getMemberOccupationConcerned() != null && activity.getMemberOccupationConcerned().isEmpty()) {
                             for(Occupation occupation : activity.getMemberOccupationConcerned()) {
@@ -75,7 +79,7 @@ public class CollectivityActivityRepository {
                 connection.rollback();
                 throw  new RuntimeException(e);
             }
-            return  activitiesGivenList;
+            return addedActivityList;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

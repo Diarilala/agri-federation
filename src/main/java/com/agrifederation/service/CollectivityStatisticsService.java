@@ -1,11 +1,9 @@
 package com.agrifederation.service;
 
 import com.agrifederation.dto.CollectivityOverallStatisticsDTO;
-import com.agrifederation.entity.Collectivity;
 import com.agrifederation.entity.CollectivityLocalStatistics;
 import com.agrifederation.repository.CollectivityLocalStatisticsRepository;
 import com.agrifederation.repository.CollectivityOverallStatRepository;
-import com.agrifederation.repository.CollectivityRepository;
 import com.agrifederation.validator.CollectivityStatisticsValidator;
 import lombok.Data;
 import org.springframework.stereotype.Service;
@@ -25,10 +23,10 @@ public class CollectivityStatisticsService {
         return collectivityOverallStatRepository.findAllCollectivityOverallStats(fromDate, toDate);
     }
 
-    public CollectivityLocalStatistics getLocalStats(LocalDate from, LocalDate to) {
+    public List<CollectivityLocalStatistics> getLocalStats(LocalDate from, LocalDate to, String id) {
         String fromDate = from.toString();
         String toDate = to.toString();
         collectivityStatisticsValidator.validateDateParameters(fromDate, toDate);
-        return collectivityLocalStatisticsRepository.getStatistics(from, to);
+        return collectivityLocalStatisticsRepository.getStatistics(from, to, id);
     }
 }

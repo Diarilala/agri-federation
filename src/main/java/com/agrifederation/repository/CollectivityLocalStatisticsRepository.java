@@ -9,14 +9,16 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 @Data
 public class CollectivityLocalStatisticsRepository {
     private final DatabaseConfig databaseConfig;
 
-    public CollectivityLocalStatistics getStatistics(LocalDate from, LocalDate to) {
-        CollectivityLocalStatistics collectivityLocalStatistics = new CollectivityLocalStatistics();
+    public List<CollectivityLocalStatistics> getStatistics(LocalDate from, LocalDate to, String id) {
+        List<CollectivityLocalStatistics> collectivityLocalStatisticsList = new ArrayList<>();
         String query = """
                     SELECT m.id AS member_id, m.first_name, m.last_name, m.email, m.member_occupation,
                     COALESCE(SUM(mp.amount), 0) AS earned_amount,
@@ -48,7 +50,8 @@ public class CollectivityLocalStatisticsRepository {
             preparedStatement.setDate(5, Date.valueOf(from));
             preparedStatement.setDate(6, Date.valueOf(to));
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
+            while (resultSet.next()) {
+                CollectivityLocalStatistics collectivityLocalStatistics =  new CollectivityLocalStatistics();
                 collectivityLocalStatistics.setId(resultSet.getString("member_id"));
                 collectivityLocalStatistics.setFirstName(resultSet.getString("first_name"));
                 collectivityLocalStatistics.setLastName(resultSet.getString("last_name"));
@@ -57,11 +60,11 @@ public class CollectivityLocalStatisticsRepository {
                 collectivityLocalStatistics.setOccupation(occupation == null ? null : Occupation.valueOf(occupation));
                 collectivityLocalStatistics.setEarnedAmount(resultSet.getFloat("earned_amount"));
                 collectivityLocalStatistics.setUnpaidAmount(resultSet.getFloat("unpaid_amount"));
-                return collectivityLocalStatistics;
+                collectivityLocalStatisticsList.add(collectivityLocalStatistics);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return collectivityLocalStatistics;
+        return collectivityLocalStatisticsList;
     }
 }

@@ -41,7 +41,7 @@ public class ControllerStatisticsController {
     @GetMapping("/{id}/statistics")
     public ResponseEntity<?> getCollectivitiesLocalStatistics(@PathVariable String id, @RequestParam(required = true) LocalDate from, @RequestParam(required = true) LocalDate to) {
         try {
-            CollectivityLocalStatistics LocalStatistics = collectivityStatisticsService.getLocalStats(from, to);
+            List<CollectivityLocalStatistics> LocalStatistics = collectivityStatisticsService.getLocalStats(from, to, id);
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(LocalStatistics);

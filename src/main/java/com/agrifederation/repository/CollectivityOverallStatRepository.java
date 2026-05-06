@@ -27,12 +27,12 @@ public class CollectivityOverallStatRepository {
                     c.unique_name as name,
                     c.unique_number as number,
                     COUNT(DISTINCT cm.member_id) as total_members,
-                    COUNT(DISTINCT CASE WHEN cm.joined_at >= '2024-01-01' AND cm.joined_at <= '2024-12-31' THEN cm.member_id END) as new_members,
-                    COUNT(DISTINCT CASE WHEN mp.creation_date >= '2026-01-01' AND mp.creation_date <= '2026-12-31' THEN mp.id_member END) as members_who_paid,
+                    COUNT(DISTINCT CASE WHEN cm.joined_at BETWEEN ?::date AND ?::date THEN cm.member_id END) as new_members,
+                    COUNT(DISTINCT CASE WHEN mp.creation_date BETWEEN ?::date AND ?::date THEN mp.id_member END) as members_who_paid,
                     CASE
                         WHEN COUNT(DISTINCT cm.member_id) = 0 THEN 0
                         ELSE ROUND(
-                            COUNT(DISTINCT CASE WHEN mp.creation_date >= '2026-01-01' AND mp.creation_date <= '2026-12-31' THEN mp.id_member END) * 100.0
+                            COUNT(DISTINCT CASE WHEN mp.creation_date BETWEEN ?::date AND ?::date THEN mp.id_member END) * 100.0
                             / COUNT(DISTINCT cm.member_id),
                             2
                         )
@@ -52,12 +52,17 @@ public class CollectivityOverallStatRepository {
             preparedStatement.setString(2, toDate);
             preparedStatement.setString(3, fromDate);
             preparedStatement.setString(4, toDate);
+            preparedStatement.setString(5, fromDate);
+            preparedStatement.setString(6, toDate);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 CollectivityOverallStatisticsDTO dto = new CollectivityOverallStatisticsDTO();
                 CollectivityInformationDTO infos = new CollectivityInformationDTO();
                 infos.setName(resultSet.getString("name"));
-                infos.setNumber(resultSet.getInt("number"));
+                int number = resultSet.getInt("number");
+                if (!resultSet.wasNull()) {
+                    infos.setNumber(number);
+                }
                 dto.setCollectivityInformation(infos);
                 dto.setMembersNumber(resultSet.getInt("new_members"));
                 dto.setOverallMemberPercentage(resultSet.getDouble("percentage"));

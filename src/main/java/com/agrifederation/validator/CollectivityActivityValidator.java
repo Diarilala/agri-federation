@@ -35,4 +35,12 @@ public class CollectivityActivityValidator {
             validateCollectivityActivity(collectivityActivity);
         }
     }
+
+    public void validateCollectivityId(String id) {
+        String message = "";
+        if(id == null || id.isBlank()) {
+            message += "Collectivity ID is required, ";
+        }
+    }
+
 }

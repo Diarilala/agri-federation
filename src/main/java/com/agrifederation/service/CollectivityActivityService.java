@@ -1,6 +1,8 @@
 package com.agrifederation.service;
 
+import com.agrifederation.dto.CollectivityActivityDTO;
 import com.agrifederation.entity.CollectivityActivity;
+import com.agrifederation.exception.BadRequestException;
 import com.agrifederation.repository.CollectivityActivityRepository;
 import com.agrifederation.validator.CollectivityActivityValidator;
 import lombok.AllArgsConstructor;
@@ -19,5 +21,15 @@ public class CollectivityActivityService {
     public List<CollectivityActivity> createActivities(String id, List<CollectivityActivity> activitiesGivenList) {
         collectivityActivityValidator.validateActivityList(activitiesGivenList);
         return collectivityActivityRepository.createActivities(id, activitiesGivenList);
+    }
+
+    public List<CollectivityActivity> getActivitiesByCollectivityId(String id) {
+        collectivityActivityValidator.validateCollectivityId(id);
+
+        List<CollectivityActivity> activities = collectivityActivityRepository.getActivitiesCollectivityById(id);
+        if(activities.isEmpty()){
+            throw new BadRequestException("No activities found for collectivity id " + id);
+        }
+        return activities;
     }
 }

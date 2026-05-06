@@ -1,5 +1,5 @@
 package com.agrifederation.enums;
 
-public enum dayOfWeek {
+public enum DayOfWeek {
     MO, TU, WE, TH, FR, SA, SU
 }

@@ -1,0 +1,38 @@
+package com.agrifederation.validator;
+
+import com.agrifederation.entity.CollectivityActivity;
+import com.agrifederation.exception.BadRequestException;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+
+@Component
+public class CollectivityActivityValidator {
+    public void validateCollectivityActivity(CollectivityActivity collectivityActivity) {
+        String message = "";
+        if(collectivityActivity.getLabel() ==  null || collectivityActivity.getLabel().isBlank()){
+            message += "Label is required, ";
+        }
+        if(collectivityActivity.getActivityType() == null || collectivityActivity.getActivityType().name().isBlank()) {
+            message += "Activity Type is required, ";
+        }
+        if(collectivityActivity.getMemberOccupationConcerned() == null || collectivityActivity.getMemberOccupationConcerned().isEmpty()) {
+            message += "Member Occupation Concerned is required, ";
+        }
+        if(collectivityActivity.getMonthlyRecurrenceRule() != null && collectivityActivity.getExecutiveDate() != null){
+            message += "Monthly Recurrence and executive date cannot both be provided";
+        }
+        if(!message.isEmpty()) {
+            throw new BadRequestException(message);
+        }
+    }
+
+    public void validateActivityList(List<CollectivityActivity> collectivityActivityList) {
+        if(collectivityActivityList == null || collectivityActivityList.isEmpty()) {
+            throw new BadRequestException("No Collectivity Activities are provided");
+        }
+        for(CollectivityActivity collectivityActivity : collectivityActivityList) {
+            validateCollectivityActivity(collectivityActivity);
+        }
+    }
+}

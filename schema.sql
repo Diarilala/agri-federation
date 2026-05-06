@@ -197,4 +197,45 @@ INSERT INTO collectivity_members (collectivity_id, member_id, joined_at, is_acti
 
 
 
-drop table agri_federation_public_collectivity
+drop table agri_federation_public_collectivity;
+
+CREATE TYPE activity_type AS ENUM ('MEETING', 'TRAINING', 'OTHER');
+
+CREATE TYPE attendance_status AS ENUM ('MISSING', 'ATTENDED', 'UNDEFINED');
+
+CREATE TABLE collectivity_activity (
+    id VARCHAR(255) PRIMARY KEY ,
+    label VARCHAR(255),
+    activity_type activity_type,
+    executive_date DATE,
+    id_collectivity VARCHAR(255) REFERENCES collectivity(id)
+);
+
+ALTER TABLE collectivity_activity
+      ADD COLUMN id_monthly_recurrence VARCHAR(255) REFERENCES monthly_recurrence_rule(id);
+
+CREATE TYPE days AS ENUM ('MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU');
+
+CREATE TABLE monthly_recurrence_rule (
+    id VARCHAR(255) PRIMARY KEY,
+    week_ordinal int,
+    day_of_week VARCHAR(2)
+);
+
+DROP TABLE monthly_recurrence_rule;
+
+ALTER TABLE monthly_recurrence_rule
+    ADD CONSTRAINT week_ordinal_check CHECK (week_ordinal BETWEEN 1 AND 5);
+
+CREATE TABLE activity_occupation (
+    id_activity VARCHAR(255) REFERENCES collectivity_activity(id),
+    occupation occupation_type,
+    PRIMARY KEY (id_activity, occupation)
+);
+
+CREATE TABLE activity_attendance (
+    id_member VARCHAR(255) REFERENCES member(id),
+    id_activity VARCHAR(255) REFERENCES collectivity_activity(id),
+    status attendance_status NOT NULL DEFAULT 'UNDEFINED',
+    PRIMARY KEY (id_member, id_activity)
+);

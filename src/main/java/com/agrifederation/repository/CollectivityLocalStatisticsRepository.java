@@ -36,17 +36,17 @@ public class CollectivityLocalStatisticsRepository {
                     FROM member m LEFT JOIN memberPayment mp
                     ON mp.id_member = m.id
                     AND mp.creation_date BETWEEN ? AND ?
-                    GROUP BY member_id, m.first_name, m.last_name
+                    GROUP BY member_id, m.first_name, m.last_name, m.email, m.member_occupation
                     ORDER BY m.first_name, m.last_name;
                 """;
         try (Connection connection = databaseConfig.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, String.valueOf(from));
-            preparedStatement.setString(2, String.valueOf(to));
-            preparedStatement.setString(3, String.valueOf(from));
-            preparedStatement.setString(4, String.valueOf(to));
-            preparedStatement.setString(5, String.valueOf(from));
-            preparedStatement.setString(6, String.valueOf(to));
+            preparedStatement.setDate(1, Date.valueOf(from));
+            preparedStatement.setDate(2, Date.valueOf(to));
+            preparedStatement.setDate(3, Date.valueOf(from));
+            preparedStatement.setDate(4, Date.valueOf(to));
+            preparedStatement.setDate(5, Date.valueOf(from));
+            preparedStatement.setDate(6, Date.valueOf(to));
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 collectivityLocalStatistics.setId(resultSet.getString("member_id"));
@@ -55,6 +55,8 @@ public class CollectivityLocalStatisticsRepository {
                 collectivityLocalStatistics.setEmail(resultSet.getString("email"));
                 String occupation = resultSet.getString("member_occupation");
                 collectivityLocalStatistics.setOccupation(occupation == null ? null : Occupation.valueOf(occupation));
+                collectivityLocalStatistics.setEarnedAmount(resultSet.getFloat("earned_amount"));
+                collectivityLocalStatistics.setUnpaidAmount(resultSet.getFloat("unpaid_amount"));
                 return collectivityLocalStatistics;
             }
         } catch (SQLException e) {

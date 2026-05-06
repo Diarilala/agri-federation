@@ -4,6 +4,7 @@ import com.agrifederation.config.DatabaseConfig;
 import com.agrifederation.entity.CollectivityActivity;
 import com.agrifederation.entity.MonthlyRecurrenceRule;
 import com.agrifederation.enums.Occupation;
+import com.agrifederation.enums.Type;
 import lombok.Data;
 import org.springframework.stereotype.Repository;
 
@@ -62,13 +63,17 @@ public class CollectivityActivityRepository {
                     while (resultSet.next()) {
                         CollectivityActivity collectivityActivity = new CollectivityActivity();
                         collectivityActivity.setId(resultSet.getString("id"));
-                        addedActivityList.add(collectivityActivity);
+                        collectivityActivity.setLabel(resultSet.getString("label"));
+                        String activityType = resultSet.getString("activity_type");
+                        collectivityActivity.setActivityType(activityType == null ? null : Type.valueOf(activityType));
+                        List<Occupation> occupationList = new ArrayList<>();
                         String returnedId = resultSet.getString("id_activity");
-                        if(activity.getMemberOccupationConcerned() != null && activity.getMemberOccupationConcerned().isEmpty()) {
+                        if(activity.getMemberOccupationConcerned() != null && !activity.getMemberOccupationConcerned().isEmpty()) {
                             for(Occupation occupation : activity.getMemberOccupationConcerned()) {
                                 activityOccupationStmt.setString(1, returnedId);
                                 activityOccupationStmt.setString(2, occupation.name());
                                 activityOccupationStmt.addBatch();
+                                occupationList.add(occupation);
                             }
                         }
                     }

@@ -38,6 +38,7 @@ public class CollectivityLocalStatisticsRepository {
                     FROM member m LEFT JOIN memberPayment mp
                     ON mp.id_member = m.id
                     AND mp.creation_date BETWEEN ? AND ?
+                    WHERE m.id_collectivity = ?
                     GROUP BY member_id, m.first_name, m.last_name, m.email, m.member_occupation
                     ORDER BY m.first_name, m.last_name;
                 """;
@@ -49,6 +50,7 @@ public class CollectivityLocalStatisticsRepository {
             preparedStatement.setDate(4, Date.valueOf(to));
             preparedStatement.setDate(5, Date.valueOf(from));
             preparedStatement.setDate(6, Date.valueOf(to));
+            preparedStatement.setString(7, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 CollectivityLocalStatistics collectivityLocalStatistics =  new CollectivityLocalStatistics();

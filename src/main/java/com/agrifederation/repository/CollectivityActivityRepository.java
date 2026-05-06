@@ -1,6 +1,7 @@
 package com.agrifederation.repository;
 
 import com.agrifederation.config.DatabaseConfig;
+import com.agrifederation.dto.MemberDescriptionDTO;
 import com.agrifederation.entity.ActivityMemberAttendance;
 import com.agrifederation.entity.CollectivityActivity;
 import com.agrifederation.entity.MonthlyRecurrenceRule;
@@ -163,6 +164,33 @@ public class CollectivityActivityRepository {
             throw new RuntimeException(e);
         }
         return attendanceList;
+    }
+
+    public MemberDescriptionDTO getMemberDescription(String memberId) {
+        String query = """
+                SELECT id, first_name, last_name, email, member_occupation
+                FROM member
+                WHERE id = ?
+                """;
+
+        try (Connection connection = databaseConfig.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query);) {
+            statement.setString(1, memberId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                MemberDescriptionDTO dto = new MemberDescriptionDTO();
+                dto.setId(resultSet.getString("id"));
+                dto.setFirstName(resultSet.getString("first_name"));
+                dto.setLastName(resultSet.getString("last_name"));
+                dto.setEmail(resultSet.getString("email"));
+                dto.setOccupation(Occupation.valueOf(resultSet.getString("occupation")));
+                return dto;
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
     }
 
 }

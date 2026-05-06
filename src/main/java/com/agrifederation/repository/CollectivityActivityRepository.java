@@ -3,6 +3,8 @@ package com.agrifederation.repository;
 import com.agrifederation.config.DatabaseConfig;
 import com.agrifederation.entity.CollectivityActivity;
 import com.agrifederation.entity.MonthlyRecurrenceRule;
+import com.agrifederation.enums.DayOfWeek;
+import com.agrifederation.enums.DaysEnum;
 import com.agrifederation.enums.Occupation;
 import com.agrifederation.enums.Type;
 import lombok.Data;
@@ -89,4 +91,55 @@ public class CollectivityActivityRepository {
             throw new RuntimeException(e);
         }
     }
+
+    public List<CollectivityActivity> getActivitiesCollectivityById(String collectivityId) {
+        List<CollectivityActivity> activities = new ArrayList<>();
+
+        String query = """
+                SELECT ca.id,
+                    ca.label,
+                    ca.activity_type,
+                    ca.executive_date,
+                    ca.id_collectivity,
+                    ca.id_monthly_recurrence,
+                    mrr.week_ordinal,
+                    mrr.day_of_week
+                FROM collectivity_activity ca
+                LEFT JOIN monthly_recurrence_rule mrr ON ca.id_monthly_recurrence = mrr.id
+                WHERE ca.id_collectivity = ?
+                ORDER BY ca.executive_date DESC
+                """;
+        try(Connection connection = databaseConfig.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query);) {
+            statement.setString(1, collectivityId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                CollectivityActivity activity = new CollectivityActivity();
+                activity.setId(resultSet.getString("id"));
+                activity.setLabel(resultSet.getString("label"));
+                activity.setActivityType(Type.valueOf(resultSet.getString("activity_type")));
+                Date executiveDate = resultSet.getDate("executive_date");
+                if(executiveDate != null) {
+                    activity.setExecutiveDate(executiveDate.toLocalDate());
+                }
+
+                activity.setIdCollectivity(resultSet.getString("id_collectivity"));
+                activity.setIdMonthlyRecurrence(resultSet.getString("id_monthly_recurrence"));
+
+                if(resultSet.getString("id_monthly_recurrence") != null) {
+                    MonthlyRecurrenceRule rule = new MonthlyRecurrenceRule();
+                    rule.setWeekOrdinal(resultSet.getInt("week_ordinal"));
+                    rule.setDayOfWeek(DaysEnum.valueOf(resultSet.getString("day_of_week")));
+                    activity.setMonthlyRecurrenceRule(rule);
+                }
+                activities.add(activity);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        return activities;
+    }
+
 }

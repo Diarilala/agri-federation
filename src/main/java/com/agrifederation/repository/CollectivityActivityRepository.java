@@ -1,12 +1,10 @@
 package com.agrifederation.repository;
 
 import com.agrifederation.config.DatabaseConfig;
+import com.agrifederation.entity.ActivityMemberAttendance;
 import com.agrifederation.entity.CollectivityActivity;
 import com.agrifederation.entity.MonthlyRecurrenceRule;
-import com.agrifederation.enums.DayOfWeek;
-import com.agrifederation.enums.DaysEnum;
-import com.agrifederation.enums.Occupation;
-import com.agrifederation.enums.Type;
+import com.agrifederation.enums.*;
 import lombok.Data;
 import org.springframework.stereotype.Repository;
 
@@ -140,6 +138,31 @@ public class CollectivityActivityRepository {
 
 
         return activities;
+    }
+
+    public List<ActivityMemberAttendance> getAttendanceByActivityId(String activityId) {
+        List<ActivityMemberAttendance> attendanceList = new ArrayList<>();
+
+        String query = """
+                SELECT id_member, status
+                FROM activity_attendance
+                WHERE id_activity = ?
+                """;
+
+        try(Connection connection = databaseConfig.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query);) {
+            statement.setString(1, activityId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                ActivityMemberAttendance activityMemberAttendance = new ActivityMemberAttendance();
+                activityMemberAttendance.setId(resultSet.getString("id_member"));
+                activityMemberAttendance.setAttendanceStatus(AttendanceStatus.valueOf(resultSet.getString("status")));
+                attendanceList.add(activityMemberAttendance);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return attendanceList;
     }
 
 }

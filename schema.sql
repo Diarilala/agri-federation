@@ -4,6 +4,8 @@ CREATE TYPE occupation_type AS ENUM('JUNIOR', 'SENIOR', 'SECRETARY', 'TREASURER'
 
 CREATE TYPE activity_type  AS ENUM('MEETING', 'TRAINING', 'OTHER');
 
+CREATE TYPE day_of_week AS ENUM('MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU');
+
 CREATE TABLE member(
     id VARCHAR(255) PRIMARY KEY NOT NULL,
     first_name VARCHAR(255) NOT NULL,

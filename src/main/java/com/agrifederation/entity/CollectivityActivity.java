@@ -16,8 +16,6 @@ public class CollectivityActivity {
     private String label;
     private Type activityType;
     private List<Occupation> memberOccupationConcerned;
-    private Integer weekOrdinal;
-    private DayOfWeek dayOfWeek;
     private MonthlyRecurrenceRule monthlyRecurrenceRule;
     private LocalDate executiveDate;
 }

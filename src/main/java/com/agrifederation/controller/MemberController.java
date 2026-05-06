@@ -17,7 +17,6 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService memberService;
-    private final MemberValidator memberValidator;
 
     @PostMapping
     public ResponseEntity<?> createMembers(@RequestBody List<Member> givenMemberList) {

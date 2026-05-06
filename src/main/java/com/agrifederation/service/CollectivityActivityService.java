@@ -1,6 +1,6 @@
 package com.agrifederation.service;
 
-import com.agrifederation.dto.CollectivityActivityDTO;
+import com.agrifederation.dto.ActivityMemberAttendanceDTO;
 import com.agrifederation.entity.CollectivityActivity;
 import com.agrifederation.exception.BadRequestException;
 import com.agrifederation.repository.CollectivityActivityRepository;
@@ -31,5 +31,10 @@ public class CollectivityActivityService {
             throw new BadRequestException("No activities found for collectivity id " + id);
         }
         return activities;
+    }
+
+    public List<ActivityMemberAttendanceDTO> getAttendanceByActivityId(String collectivityId, String activityId) {
+        collectivityActivityValidator.validateActivityAttendance(collectivityId, activityId);
+        return collectivityActivityRepository.getAttendanceWithMemberDetails(activityId);
     }
 }

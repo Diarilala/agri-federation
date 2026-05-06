@@ -23,7 +23,6 @@ public class MemberController {
     public ResponseEntity<?> createMembers(@RequestBody List<Member> givenMemberList) {
         List<Member> memberList;
         try {
-            memberValidator.validateMemberList(givenMemberList);
             memberList = memberService.createMembers(givenMemberList);
         } catch(BadRequestException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

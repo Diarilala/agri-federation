@@ -61,7 +61,7 @@ public class MemberRepository {
                         member.setMemberIdentifier(returnedId);
                         members.add(member);
 
-                        if(member.getReferrals() != null || !member.getReferrals().isEmpty()){
+                        if(member.getReferrals() != null && !member.getReferrals().isEmpty()){
                             for(Referral referral : member.getReferrals()){
                                 referralStmt.setString(1, UUID.randomUUID().toString());
                                 referralStmt.setString(2, referral.getReferee().getMemberIdentifier());

@@ -43,4 +43,15 @@ public class CollectivityActivityValidator {
         }
     }
 
+    public void validateActivityAttendance(String collectivityId, String activityId) {
+        String message = "";
+        if(collectivityId == null || collectivityId.isBlank()) {
+            message += "Collectivity ID is required, ";
+        }
+
+        if(activityId == null || activityId.isBlank()) {
+            message += "Activity ID is required, ";
+        }
+    }
+
 }

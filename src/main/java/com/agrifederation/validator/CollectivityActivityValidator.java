@@ -52,6 +52,10 @@ public class CollectivityActivityValidator {
         if(activityId == null || activityId.isBlank()) {
             message += "Activity ID is required, ";
         }
+
+        if(!message.isBlank()) {
+            throw new BadRequestException(message);
+        }
     }
 
 }

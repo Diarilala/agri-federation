@@ -83,6 +83,7 @@ CREATE TABLE cash_account(
 );
 
 CREATE TABLE bank_account(
+    collectivity_id VARCHAR(255) REFERENCES collectivity(id),
     id VARCHAR(255) PRIMARY KEY REFERENCES financial_account(id),
     holder_name VARCHAR(255) NOT NULL,
     bank_name bank_name NOT NULL,
@@ -119,21 +120,7 @@ CREATE TABLE IF NOT EXISTS collectivity_transaction (
 );
 
 
-CREATE TABLE IF NOT EXISTS collectivity_activity (
-    id VARCHAR(50) PRIMARY KEY,
-    collectivity_id VARCHAR(50) NOT NULL REFERENCES collectivity(id),
-    label VARCHAR(255) NOT NULL,
-    activity_type activity_type NOT NULL,
-    member_occupation_concerned VARCHAR(100),
-    week_ordinal INTEGER CHECK ( week_ordinal BETWEEN 1 AND 5),
-    day_of_week day_of_week,
-    executive_date DATE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT check_recurrence_or_date CHECK (
-        (week_ordinal IS NOT NULL AND day_of_week IS NOT NULL AND executive_date IS NULL) OR
-        (week_ordinal IS NULL AND day_of_week IS NULL AND executive_date IS NOT NULL)
-    )
-);
+
 
 alter table cash_account add column amount FLOAT not null default 0;
 
@@ -141,59 +128,7 @@ alter table cash_account add column amount FLOAT not null default 0;
 alter table mobile_banking_account add column amount FLOAT not null default 0;
 
 
-INSERT INTO collectivity (id, location, specialty, federation_approval, approval_date, approved_by, created_at, updated_at, unique_number, unique_name) VALUES
-('col-1', 'Ambatondrazaka', 'Riziculture', true, '2024-01-15', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '1', 'Mpanorina'),
-('col-2', 'Ambatondrazaka', 'Pisciculture', true, '2024-02-20', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '2', 'Dobo voalahany'),
-('col-3', 'Brickaville', 'Apiculture', true, '2024-03-10', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '3', 'Tantely mamy');
 
-INSERT INTO member (id, first_name, last_name, birth_date, gender, address, profession, phone_number, email, member_occupation, id_collectivity, registration_fee_paid, membership_dues_paid) VALUES
-('C1-M1', 'Nom membre 1', 'Prénom membre 1', '1980-02-01', 'MALE', 'Lot II V M Ambato', 'Riziculteur', 341234567, 'member.1@fed-agri.mg', 'PRESIDENT', 'col-1', true, true),
-('C1-M2', 'Nom membre 2', 'Prénom membre 2', '1982-03-05', 'MALE', 'Lot II F Ambato', 'Agriculteur', 321234567, 'member.2@fed-agri.mg', 'VICE_PRESIDENT', 'col-1', true, true),
-('C1-M3', 'Nom membre 3', 'Prénom membre 3', '1992-03-10', 'MALE', 'Lot II J Ambato', 'Collecteur', 331234567, 'member.3@fed-agri.mg', 'SECRETARY', 'col-1', true, true),
-('C1-M4', 'Nom membre 4', 'Prénom membre 4', '1988-05-22', 'FEMALE', 'Lot A K 50 Ambato', 'Distributeur', 381234567, 'member.4@fed-agri.mg', 'TREASURER', 'col-1', true, true),
-('C1-M5', 'Nom membre 5', 'Prénom membre 5', '1999-08-21', 'MALE', 'Lot UV 80 Ambato', 'Riziculteur', 373434567, 'member.5@fed-agri.mg', 'SENIOR', 'col-1', true, true),
-('C1-M6', 'Nom membre 6', 'Prénom membre 6', '1998-08-22', 'FEMALE', 'Lot UV 6 Ambato', 'Riziculteur', 372234567, 'member.6@fed-agri.mg', 'SENIOR', 'col-1', true, true),
-('C1-M7', 'Nom membre 7', 'Prénom membre 7', '1998-01-31', 'MALE', 'Lot UV 7 Ambato', 'Riziculteur', 374234567, 'member.7@fed-agri.mg', 'SENIOR', 'col-1', true, true),
-('C1-M8', 'Nom membre 8', 'Prénom membre 8', '1975-08-20', 'MALE', 'Lot UV 8 Ambato', 'Riziculteur', 370234567, 'member.8@fed-agri.mg', 'SENIOR', 'col-1', true, true);
-
-
-INSERT INTO member (id, first_name, last_name, birth_date, gender, address, profession, phone_number, email, member_occupation, id_collectivity, registration_fee_paid, membership_dues_paid) VALUES
-('C2-M1', 'Nom membre 1', 'Prénom membre 1', '1980-02-01', 'MALE', 'Lot II V M Ambato', 'Riziculteur', 341234567, 'member.1@fed-agri.mg', 'SENIOR', 'col-2', true, true),
-('C2-M2', 'Nom membre 2', 'Prénom membre 2', '1982-03-05', 'MALE', 'Lot II F Ambato', 'Agriculteur', 321234567, 'member.2@fed-agri.mg', 'SENIOR', 'col-2', true, true),
-('C2-M3', 'Nom membre 3', 'Prénom membre 3', '1992-03-10', 'MALE', 'Lot II J Ambato', 'Collecteur', 331234567, 'member.3@fed-agri.mg', 'SENIOR', 'col-2', true, true),
-('C2-M4', 'Nom membre 4', 'Prénom membre 4', '1988-05-22', 'FEMALE', 'Lot A K 50 Ambato', 'Distributeur', 381234567, 'member.4@fed-agri.mg', 'SENIOR', 'col-2', true, true),
-('C2-M5', 'Nom membre 5', 'Prénom membre 5', '1999-08-21', 'MALE', 'Lot UV 80 Ambato', 'Riziculteur', 373434567, 'member.5@fed-agri.mg', 'PRESIDENT', 'col-2', true, true),
-('C2-M6', 'Nom membre 6', 'Prénom membre 6', '1998-08-22', 'FEMALE', 'Lot UV 6 Ambato', 'Riziculteur', 372234567, 'member.6@fed-agri.mg', 'VICE_PRESIDENT', 'col-2', true, true),
-('C2-M7', 'Nom membre 7', 'Prénom membre 7', '1998-01-31', 'MALE', 'Lot UV 7 Ambato', 'Riziculteur', 374234567, 'member.7@fed-agri.mg', 'SECRETARY', 'col-2', true, true),
-('C2-M8', 'Nom membre 8', 'Prénom membre 8', '1975-08-20', 'MALE', 'Lot UV 8 Ambato', 'Riziculteur', 370234567, 'member.8@fed-agri.mg', 'TREASURER', 'col-2', true, true);
-
-INSERT INTO member (id, first_name, last_name, birth_date, gender, address, profession, phone_number, email, member_occupation, id_collectivity, registration_fee_paid, membership_dues_paid) VALUES
-('C3-M1', 'Nom membre 9', 'Prénom membre 9', '1988-01-02', 'MALE', 'Lot 33 J Antsirabe', 'Apiculteur', 34034567, 'member.9@fed-agri.mg', 'PRESIDENT', 'col-3', true, true),
-('C3-M2', 'Nom membre 10', 'Prénom membre 10', '1982-03-05', 'MALE', 'Lot 2 J Antsirabe', 'Agriculteur', 338634567, 'member.10@fed-agri.mg', 'VICE_PRESIDENT', 'col-3', true, true),
-('C3-M3', 'Nom membre 11', 'Prénom membre 11', '1992-03-12', 'MALE', 'Lot 8 KM Antsirabe', 'Collecteur', 338234567, 'member.11@fed-agri.mg', 'SECRETARY', 'col-3', true, true),
-('C3-M4', 'Nom membre 12', 'Prénom membre 12', '1988-05-10', 'FEMALE', 'Lot A K 50 Antsirabe', 'Distributeur', 382334567, 'member.12@fed-agri.mg', 'TREASURER', 'col-3', true, true),
-('C3-M5', 'Nom membre 13', 'Prénom membre 13', '1999-08-11', 'MALE', 'Lot UV 80 Antsirabe', 'Apiculteur', 373365567, 'member.13@fed-agri.mg', 'SENIOR', 'col-3', true, true),
-('C3-M6', 'Nom membre 14', 'Prénom membre 14', '1998-08-09', 'FEMALE', 'Lot UV 6 Antsirabe', 'Apiculteur', 378234567, 'member.14@fed-agri.mg', 'SENIOR', 'col-3', true, true),
-('C3-M7', 'Nom membre 15', 'Prénom membre 15', '1998-01-13', 'MALE', 'Lot UV 7 Antsirabe', 'Apiculteur', 374914567, 'member.15@fed-agri.mg', 'SENIOR', 'col-3', true, true),
-('C3-M8', 'Nom membre 16', 'Prénom membre 16', '1975-08-02', 'MALE', 'Lot UV 8 Antsirabe', 'Apiculteur', 370634567, 'member.16@fed-agri.mg', 'SENIOR', 'col-3', true, true);
-
-
-INSERT INTO collectivity_structure (collectivity_id, president_id, vice_president_id, treasurer_id, secretary_id) VALUES
-('col-1', 'C1-M1', 'C1-M2', 'C1-M4', 'C1-M3'),
-('col-2', 'C2-M5', 'C2-M6', 'C2-M8', 'C2-M7'),
-('col-3', 'C3-M1', 'C3-M2', 'C3-M4', 'C3-M3');
-
-
-
-INSERT INTO collectivity_members (collectivity_id, member_id, joined_at, is_active) VALUES
-('col-3', 'C3-M1', '2024-01-01', true),
-('col-3', 'C3-M2', '2024-01-01', true),
-('col-3', 'C3-M3', '2024-01-01', true),
-('col-3', 'C3-M4', '2024-01-01', true),
-('col-3', 'C3-M5', '2024-01-01', true),
-('col-3', 'C3-M6', '2024-01-01', true),
-('col-3', 'C3-M7', '2024-01-01', true),
-('col-3', 'C3-M8', '2024-01-01', true);
 
 
 
@@ -222,7 +157,7 @@ CREATE TABLE monthly_recurrence_rule (
     day_of_week VARCHAR(2)
 );
 
-DROP TABLE monthly_recurrence_rule;
+
 
 ALTER TABLE monthly_recurrence_rule
     ADD CONSTRAINT week_ordinal_check CHECK (week_ordinal BETWEEN 1 AND 5);
@@ -239,3 +174,85 @@ CREATE TABLE activity_attendance (
     status attendance_status NOT NULL DEFAULT 'UNDEFINED',
     PRIMARY KEY (id_member, id_activity)
 );
+
+DELETE FROM collectivity_transaction;
+DELETE FROM memberpayment;
+DELETE FROM membership_fee;
+DELETE FROM bank_account;
+DELETE FROM mobile_banking_account;
+DELETE FROM cash_account;
+DELETE FROM financial_account;
+DELETE FROM collectivity_members;
+DELETE FROM collectivity_structure;
+DELETE FROM referral;
+DELETE FROM member;
+DELETE FROM collectivity;
+
+INSERT INTO collectivity (id, location, specialty, federation_approval, approval_date, created_at, updated_at, unique_number, unique_name) VALUES
+('col-1', 'Ambatondrazaka', 'Riziculture', true, '2024-01-15', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '1', 'Mpanorina'),
+('col-2', 'Ambatondrazaka', 'Pisciculture', true, '2024-02-20', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '2', 'Dobo voalahany'),
+('col-3', 'Brickaville', 'Apiculture', true, '2024-03-10', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '3', 'Tantely mamy');
+
+
+
+INSERT INTO member (id, first_name, last_name, birth_date, gender, address, profession, phone_number, email, member_occupation, id_collectivity, registration_fee_paid, membership_dues_paid) VALUES
+('C1-M1', 'Nom membre 1', 'Prénom membre 1', '1980-02-01', 'MALE', 'Lot II V M Ambato', 'Riziculteur', 341234567, 'member.1@fed-agri.mg', 'PRESIDENT', 'col-1', true, true),
+('C1-M2', 'Nom membre 2', 'Prénom membre 2', '1982-03-05', 'MALE', 'Lot II F Ambato', 'Agriculteur', 321234567, 'member.2@fed-agri.mg', 'VICE_PRESIDENT', 'col-1', true, true),
+('C1-M3', 'Nom membre 3', 'Prénom membre 3', '1992-03-10', 'MALE', 'Lot II J Ambato', 'Collecteur', 331234567, 'member.3@fed-agri.mg', 'SECRETARY', 'col-1', true, true),
+('C1-M4', 'Nom membre 4', 'Prénom membre 4', '1988-05-22', 'FEMALE', 'Lot A K 50 Ambato', 'Distributeur', 381234567, 'member.4@fed-agri.mg', 'TREASURER', 'col-1', true, true),
+('C1-M5', 'Nom membre 5', 'Prénom membre 5', '1999-08-21', 'MALE', 'Lot UV 80 Ambato', 'Riziculteur', 373434567, 'member.5@fed-agri.mg', 'SENIOR', 'col-1', true, true),
+('C1-M6', 'Nom membre 6', 'Prénom membre 6', '1998-08-22', 'FEMALE', 'Lot UV 6 Ambato', 'Riziculteur', 372234567, 'member.6@fed-agri.mg', 'SENIOR', 'col-1', true, true),
+('C1-M7', 'Nom membre 7', 'Prénom membre 7', '1998-01-31', 'MALE', 'Lot UV 7 Ambato', 'Riziculteur', 374234567, 'member.7@fed-agri.mg', 'SENIOR', 'col-1', true, true),
+('C1-M8', 'Nom membre 8', 'Prénom membre 8', '1975-08-20', 'MALE', 'Lot UV 8 Ambato', 'Riziculteur', 370234567, 'member.8@fed-agri.mg', 'SENIOR', 'col-1', true, true);
+
+
+INSERT INTO member (id, first_name, last_name, birth_date, gender, address, profession, phone_number, email, member_occupation, id_collectivity, registration_fee_paid, membership_dues_paid) VALUES
+('C2-M1', 'Nom membre 1', 'Prénom membre 1', '1980-02-01', 'MALE', 'Lot II V M Ambato', 'Riziculteur', 341234567, 'member.1@fed-agri.mg', 'SENIOR', 'col-2', true, true),
+('C2-M2', 'Nom membre 2', 'Prénom membre 2', '1982-03-05', 'MALE', 'Lot II F Ambato', 'Agriculteur', 321234567, 'member.2@fed-agri.mg', 'SENIOR', 'col-2', true, true),
+('C2-M3', 'Nom membre 3', 'Prénom membre 3', '1992-03-10', 'MALE', 'Lot II J Ambato', 'Collecteur', 331234567, 'member.3@fed-agri.mg', 'SENIOR', 'col-2', true, true),
+('C2-M4', 'Nom membre 4', 'Prénom membre 4', '1988-05-22', 'FEMALE', 'Lot A K 50 Ambato', 'Distributeur', 381234567, 'member.4@fed-agri.mg', 'SENIOR', 'col-2', true, true),
+('C2-M5', 'Nom membre 5', 'Prénom membre 5', '1999-08-21', 'MALE', 'Lot UV 80 Ambato', 'Riziculteur', 373434567, 'member.5@fed-agri.mg', 'PRESIDENT', 'col-2', true, true),
+('C2-M6', 'Nom membre 6', 'Prénom membre 6', '1998-08-22', 'FEMALE', 'Lot UV 6 Ambato', 'Riziculteur', 372234567, 'member.6@fed-agri.mg', 'VICE_PRESIDENT', 'col-2', true, true),
+('C2-M7', 'Nom membre 7', 'Prénom membre 7', '1998-01-31', 'MALE', 'Lot UV 7 Ambato', 'Riziculteur', 374234567, 'member.7@fed-agri.mg', 'SECRETARY', 'col-2', true, true),
+('C2-M8', 'Nom membre 8', 'Prénom membre 8', '1975-08-20', 'MALE', 'Lot UV 8 Ambato', 'Riziculteur', 370234567, 'member.8@fed-agri.mg', 'TREASURER', 'col-2', true, true);
+
+
+INSERT INTO member (id, first_name, last_name, birth_date, gender, address, profession, phone_number, email, member_occupation, id_collectivity, registration_fee_paid, membership_dues_paid) VALUES
+('C3-M1', 'Nom membre 9', 'Prénom membre 9', '1988-01-02', 'MALE', 'Lot 33 J Antsirabe', 'Apiculteur', 34034567, 'member.9@fed-agri.mg', 'PRESIDENT', 'col-3', true, true),
+('C3-M2', 'Nom membre 10', 'Prénom membre 10', '1982-03-05', 'MALE', 'Lot 2 J Antsirabe', 'Agriculteur', 338634567, 'member.10@fed-agri.mg', 'VICE_PRESIDENT', 'col-3', true, true),
+('C3-M3', 'Nom membre 11', 'Prénom membre 11', '1992-03-12', 'MALE', 'Lot 8 KM Antsirabe', 'Collecteur', 338234567, 'member.11@fed-agri.mg', 'SECRETARY', 'col-3', true, true),
+('C3-M4', 'Nom membre 12', 'Prénom membre 12', '1988-05-10', 'FEMALE', 'Lot A K 50 Antsirabe', 'Distributeur', 382334567, 'member.12@fed-agri.mg', 'TREASURER', 'col-3', true, true),
+('C3-M5', 'Nom membre 13', 'Prénom membre 13', '1999-08-11', 'MALE', 'Lot UV 80 Antsirabe', 'Apiculteur', 373365567, 'member.13@fed-agri.mg', 'SENIOR', 'col-3', true, true),
+('C3-M6', 'Nom membre 14', 'Prénom membre 14', '1998-08-09', 'FEMALE', 'Lot UV 6 Antsirabe', 'Apiculteur', 378234567, 'member.14@fed-agri.mg', 'SENIOR', 'col-3', true, true),
+('C3-M7', 'Nom membre 15', 'Prénom membre 15', '1998-01-13', 'MALE', 'Lot UV 7 Antsirabe', 'Apiculteur', 374914567, 'member.15@fed-agri.mg', 'SENIOR', 'col-3', true, true),
+('C3-M8', 'Nom membre 16', 'Prénom membre 16', '1975-08-02', 'MALE', 'Lot UV 8 Antsirabe', 'Apiculteur', 370634567, 'member.16@fed-agri.mg', 'SENIOR', 'col-3', true, true);
+
+
+INSERT INTO financial_account (id, type, amount) VALUES
+('C1-A-CASH', 'CASH', 0),
+('C1-A-MOBILE-1', 'MOBILE', 0),
+('C2-A-CASH', 'CASH', 0),
+('C2-A-MOBILE-1', 'MOBILE', 0),
+('C3-A-CASH', 'CASH', 0);
+
+drop table cash_account;
+
+CREATE TABLE cash_account(
+    id VARCHAR(255) PRIMARY KEY REFERENCES financial_account(id),
+    collectivity_id VARCHAR(255) REFERENCES collectivity(id),
+    amount FLOAT NOT NULL DEFAULT 0
+);
+
+
+INSERT INTO cash_account (id, collectivity_id, amount) VALUES
+('C1-A-CASH', 'col-1', 0),
+('C2-A-CASH', 'col-2', 0),
+('C3-A-CASH', 'col-3', 0);
+
+alter table mobile_banking_account add column collectivity_id VARCHAR(255) REFERENCES collectivity(id);
+
+
+INSERT INTO mobile_banking_account (id, holder_name, mobile_banking_service, mobile_number, collectivity_id, amount) VALUES
+('C1-A-MOBILE-1', 'Mpanorina', 'ORANGE_MONEY', '0370489612', 'col-1', 0),
+('C2-A-MOBILE-1', 'Dobo voalohany', 'ORANGE_MONEY', '0320489612', 'col-2', 0);
+

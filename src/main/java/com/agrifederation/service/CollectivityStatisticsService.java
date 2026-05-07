@@ -2,6 +2,7 @@ package com.agrifederation.service;
 
 import com.agrifederation.dto.CollectivityOverallStatisticsDTO;
 import com.agrifederation.entity.CollectivityLocalStatistics;
+import com.agrifederation.exception.BadRequestException;
 import com.agrifederation.repository.CollectivityLocalStatisticsRepository;
 import com.agrifederation.repository.CollectivityOverallStatRepository;
 import com.agrifederation.validator.CollectivityStatisticsValidator;
@@ -26,7 +27,14 @@ public class CollectivityStatisticsService {
     public List<CollectivityLocalStatistics> getLocalStats(LocalDate from, LocalDate to, String id) {
         String fromDate = from.toString();
         String toDate = to.toString();
-        collectivityStatisticsValidator.validateDateParameters(fromDate, toDate);
-        return collectivityLocalStatisticsRepository.getStatistics(from, to, id);
+        try{
+            collectivityStatisticsValidator.validateDateParameters(fromDate, toDate);
+            return collectivityLocalStatisticsRepository.getStatistics(from, to, id);
+        } catch (BadRequestException e) {
+            throw new BadRequestException(e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+
     }
 }

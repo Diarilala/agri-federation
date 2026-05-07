@@ -107,9 +107,6 @@ public class CollectivityController {
 
     }
 
-    @GetMapping("/{id}/statistics")
-    public ResponseEntity<?> getMemberStatistics(@PathVariable String id, @RequestParam LocalDate from, @RequestParam LocalDate to) {
 
-    }
 
 }

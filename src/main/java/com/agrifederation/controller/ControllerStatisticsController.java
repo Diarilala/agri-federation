@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/collectivites")
+@RequestMapping("/collectivities")
 @Data
 @AllArgsConstructor
 public class ControllerStatisticsController {

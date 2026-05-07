@@ -1,6 +1,7 @@
 package com.agrifederation.controller;
 
 import com.agrifederation.dto.ActivityMemberAttendanceDTO;
+import com.agrifederation.dto.ActivityRequest;
 import com.agrifederation.entity.CollectivityActivity;
 import com.agrifederation.exception.BadRequestException;
 import com.agrifederation.exception.NotFoundException;
@@ -19,7 +20,7 @@ public class CollectivityActivityController {
     private final CollectivityActivityService collectivityActivityService;
 
     @PostMapping("/{id}/activities")
-    public ResponseEntity<?> createActivities(@PathVariable String id, @RequestBody List<CollectivityActivity> activitiesGivenList) {
+    public ResponseEntity<?> createActivities(@PathVariable String id, @RequestBody List<ActivityRequest> activitiesGivenList) {
         List<CollectivityActivity> collectivityActivities;
         try {
             collectivityActivities = collectivityActivityService.createActivities(id, activitiesGivenList);

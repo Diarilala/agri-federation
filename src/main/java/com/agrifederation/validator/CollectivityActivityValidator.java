@@ -1,5 +1,6 @@
 package com.agrifederation.validator;
 
+import com.agrifederation.dto.ActivityRequest;
 import com.agrifederation.entity.CollectivityActivity;
 import com.agrifederation.exception.BadRequestException;
 import org.springframework.stereotype.Component;
@@ -8,7 +9,7 @@ import java.util.List;
 
 @Component
 public class CollectivityActivityValidator {
-    public void validateCollectivityActivity(CollectivityActivity collectivityActivity) {
+    public void validateCollectivityActivity(ActivityRequest collectivityActivity) {
         String message = "";
         if(collectivityActivity.getLabel() ==  null || collectivityActivity.getLabel().isBlank()){
             message += "Label is required, ";
@@ -27,11 +28,11 @@ public class CollectivityActivityValidator {
         }
     }
 
-    public void validateActivityList(List<CollectivityActivity> collectivityActivityList) {
+    public void validateActivityList(List<ActivityRequest> collectivityActivityList) {
         if(collectivityActivityList == null || collectivityActivityList.isEmpty()) {
             throw new BadRequestException("No Collectivity Activities are provided");
         }
-        for(CollectivityActivity collectivityActivity : collectivityActivityList) {
+        for(ActivityRequest collectivityActivity : collectivityActivityList) {
             validateCollectivityActivity(collectivityActivity);
         }
     }

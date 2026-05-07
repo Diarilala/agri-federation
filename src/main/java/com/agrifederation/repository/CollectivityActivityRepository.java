@@ -2,6 +2,7 @@ package com.agrifederation.repository;
 
 import com.agrifederation.config.DatabaseConfig;
 import com.agrifederation.dto.ActivityMemberAttendanceDTO;
+import com.agrifederation.dto.ActivityRequest;
 import com.agrifederation.dto.MemberDescriptionDTO;
 import com.agrifederation.entity.ActivityMemberAttendance;
 import com.agrifederation.entity.CollectivityActivity;
@@ -21,7 +22,7 @@ import java.util.UUID;
 public class CollectivityActivityRepository {
     private final DatabaseConfig databaseConfig;
 
-    public List<CollectivityActivity> createActivities(String id, List<CollectivityActivity> activitiesGivenList) {
+    public List<CollectivityActivity> createActivities(String id, List<ActivityRequest> activitiesGivenList) {
         String activityQuery = """
                 INSERT INTO collectivity_activity (id, label, activity_type,
                 executive_date, id_collectivity, id_monthly_recurrence) VALUES(?, ?, ?::activity_type, ?, ?, ?)
@@ -44,7 +45,7 @@ public class CollectivityActivityRepository {
             try (PreparedStatement activityStmt = connection.prepareStatement(activityQuery);
                 PreparedStatement activityOccupationStmt = connection.prepareStatement(activityOccupationQuery);
                 PreparedStatement recurrenceStmt = connection.prepareStatement(monthly_recurrence);) {
-                for(CollectivityActivity activity : activitiesGivenList) {
+                for(ActivityRequest activity : activitiesGivenList) {
                     activityStmt.setString(1, UUID.randomUUID().toString());
                     activityStmt.setString(2, activity.getLabel());
                     activityStmt.setString(3, activity.getActivityType().name());

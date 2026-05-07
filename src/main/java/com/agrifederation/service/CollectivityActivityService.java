@@ -1,6 +1,8 @@
 package com.agrifederation.service;
 
+import com.agrifederation.dto.ActivityResponse;
 import com.agrifederation.dto.ActivityMemberAttendanceDTO;
+import com.agrifederation.dto.ActivityRequest;
 import com.agrifederation.entity.CollectivityActivity;
 import com.agrifederation.exception.BadRequestException;
 import com.agrifederation.repository.CollectivityActivityRepository;
@@ -18,8 +20,9 @@ public class CollectivityActivityService {
     private final CollectivityActivityRepository collectivityActivityRepository;
     private final CollectivityActivityValidator collectivityActivityValidator;
 
-    public List<CollectivityActivity> createActivities(String id, List<CollectivityActivity> activitiesGivenList) {
+    public List<CollectivityActivity> createActivities(String id, List<ActivityRequest> activitiesGivenList) {
         collectivityActivityValidator.validateActivityList(activitiesGivenList);
+
         return collectivityActivityRepository.createActivities(id, activitiesGivenList);
     }
 

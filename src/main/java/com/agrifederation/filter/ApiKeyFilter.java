@@ -10,7 +10,7 @@ import java.io.IOException;
 
 @Component
 public class ApiKeyFilter implements Filter {
-    @Value("${api.key")
+    @Value("${api.key}")
     private String validApiKey;
     private final String apiKeyHeader = "x-api-key";
 

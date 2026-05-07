@@ -5,6 +5,6 @@ import lombok.Data;
 
 @Data
 public class MonthlyRecurrenceRule {
-    private int weekOrdinal;
+    private Integer weekOrdinal;
     private DaysEnum dayOfWeek;
 }

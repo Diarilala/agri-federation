@@ -83,7 +83,7 @@ public class CollectivityActivityRepository {
                             }
                             collectivityActivity.setMemberOccupationConcerned(occupationList);
                             MonthlyRecurrenceRule monthlyRecurrenceRule = new MonthlyRecurrenceRule();
-                            monthlyRecurrenceRule.setWeekOrdinal(activity.getMonthlyRecurrenceRule().getWeekOrdinal());
+                            monthlyRecurrenceRule.setWeekOrdinal(activity.getMonthlyRecurrenceRule().getWeekOrdinal() == null ? null : activity.getMonthlyRecurrenceRule().getWeekOrdinal());
                             monthlyRecurrenceRule.setDayOfWeek(activity.getMonthlyRecurrenceRule().getDayOfWeek());
                             collectivityActivity.setMonthlyRecurrenceRule(monthlyRecurrenceRule);
                             addedActivityList.add(collectivityActivity);

@@ -23,7 +23,7 @@ public class ControllerStatisticsController {
     private final CollectivityStatisticsService collectivityStatisticsService;
 
     @GetMapping("/statistics")
-    public ResponseEntity<?> getCollectivitiesOverallStatistics(@RequestParam(required = true) String from, @RequestParam(required = true) String to) {
+    public ResponseEntity<?> getCollectivitiesOverallStatistics(@RequestParam(required = false) String from, @RequestParam(required = false) String to) {
         try {
             List<CollectivityOverallStatisticsDTO> statistics = collectivityStatisticsService.getOverallStats(from, to);
             return ResponseEntity.ok(statistics);
@@ -34,12 +34,12 @@ public class ControllerStatisticsController {
         } catch (Exception e) {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error occurred while calculating stats" + e.getMessage());
+                    .body(e.getMessage());
         }
     }
 
     @GetMapping("/{id}/statistics")
-    public ResponseEntity<?> getCollectivitiesLocalStatistics(@PathVariable String id, @RequestParam(required = true) LocalDate from, @RequestParam(required = true) LocalDate to) {
+    public ResponseEntity<?> getCollectivitiesLocalStatistics(@PathVariable String id, @RequestParam(required = false) LocalDate from, @RequestParam(required = false) LocalDate to) {
         try {
             List<CollectivityLocalStatistics> LocalStatistics = collectivityStatisticsService.getLocalStats(from, to, id);
             return ResponseEntity

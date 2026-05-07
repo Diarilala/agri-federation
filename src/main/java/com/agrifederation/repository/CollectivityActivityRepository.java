@@ -1,12 +1,12 @@
 package com.agrifederation.repository;
 
 import com.agrifederation.config.DatabaseConfig;
+import com.agrifederation.dto.ActivityMemberAttendanceDTO;
+import com.agrifederation.dto.MemberDescriptionDTO;
+import com.agrifederation.entity.ActivityMemberAttendance;
 import com.agrifederation.entity.CollectivityActivity;
 import com.agrifederation.entity.MonthlyRecurrenceRule;
-import com.agrifederation.enums.DayOfWeek;
-import com.agrifederation.enums.DaysEnum;
-import com.agrifederation.enums.Occupation;
-import com.agrifederation.enums.Type;
+import com.agrifederation.enums.*;
 import lombok.Data;
 import org.springframework.stereotype.Repository;
 
@@ -152,5 +152,47 @@ public class CollectivityActivityRepository {
 
         return activities;
     }
+
+    public List<ActivityMemberAttendanceDTO> getAttendanceWithMemberDetails(String activityId) {
+        List<ActivityMemberAttendanceDTO> attendanceList = new ArrayList<>();
+
+        String query = """
+                SELECT aa.id_member, aa.status,
+                       m.first_name, m.last_name, m.email, m.member_occupation
+                FROM activity_attendance aa
+                JOIN member m ON m.id = aa.id_member
+                WHERE id_activity = ?
+                """;
+
+        try(Connection connection = databaseConfig.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query);) {
+            statement.setString(1, activityId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                ActivityMemberAttendanceDTO dto = new ActivityMemberAttendanceDTO();
+                dto.setId(resultSet.getString("id_member"));
+
+                MemberDescriptionDTO descriptionDTO = new MemberDescriptionDTO();
+                descriptionDTO.setId(resultSet.getString("id_member"));
+                descriptionDTO.setFirstName(resultSet.getString("first_name"));
+                descriptionDTO.setLastName(resultSet.getString("last_name"));
+                descriptionDTO.setEmail(resultSet.getString("email"));
+                descriptionDTO.setOccupation(Occupation.valueOf(resultSet.getString("occupation")));
+                dto.setMemberDescription(descriptionDTO);
+
+                dto.setAttendanceStatus(AttendanceStatus.valueOf(resultSet.getString("status")));
+
+                attendanceList.add(dto);
+
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return attendanceList;
+    }
+
+
 
 }

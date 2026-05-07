@@ -35,4 +35,23 @@ public class CollectivityActivityValidator {
             validateCollectivityActivity(collectivityActivity);
         }
     }
+
+    public void validateCollectivityId(String id) {
+        String message = "";
+        if(id == null || id.isBlank()) {
+            message += "Collectivity ID is required, ";
+        }
+    }
+
+    public void validateActivityAttendance(String collectivityId, String activityId) {
+        String message = "";
+        if(collectivityId == null || collectivityId.isBlank()) {
+            message += "Collectivity ID is required, ";
+        }
+
+        if(activityId == null || activityId.isBlank()) {
+            message += "Activity ID is required, ";
+        }
+    }
+
 }

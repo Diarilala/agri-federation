@@ -23,9 +23,9 @@ public class ControllerStatisticsController {
     private final CollectivityStatisticsService collectivityStatisticsService;
 
     @GetMapping("/statistics")
-    public ResponseEntity<?> getCollectivitiesOverallStatistics(@RequestParam(required = true) String fromDate, @RequestParam(required = true) String toDate) {
+    public ResponseEntity<?> getCollectivitiesOverallStatistics(@RequestParam(required = true) String from, @RequestParam(required = true) String to) {
         try {
-            List<CollectivityOverallStatisticsDTO> statistics = collectivityStatisticsService.getOverallStats(fromDate, toDate);
+            List<CollectivityOverallStatisticsDTO> statistics = collectivityStatisticsService.getOverallStats(from, to);
             return ResponseEntity.ok(statistics);
         } catch (BadRequestException e) {
             return ResponseEntity

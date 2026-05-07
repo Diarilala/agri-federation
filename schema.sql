@@ -82,15 +82,6 @@ CREATE TABLE cash_account(
     id VARCHAR(255) PRIMARY KEY REFERENCES financial_account(id)
 );
 
-CREATE TABLE bank_account(
-    collectivity_id VARCHAR(255) REFERENCES collectivity(id),
-    id VARCHAR(255) PRIMARY KEY REFERENCES financial_account(id),
-    holder_name VARCHAR(255) NOT NULL,
-    bank_name bank_name NOT NULL,
-    bank_code INT NOT NULL,
-    bank_branch_code INT NOT NULL,
-    bank_account_key INT NOT NULL
-);
 
 CREATE TABLE mobile_banking_account(
     id VARCHAR(255) PRIMARY KEY REFERENCES financial_account(id),
@@ -256,3 +247,141 @@ INSERT INTO mobile_banking_account (id, holder_name, mobile_banking_service, mob
 ('C1-A-MOBILE-1', 'Mpanorina', 'ORANGE_MONEY', '0370489612', 'col-1', 0),
 ('C2-A-MOBILE-1', 'Dobo voalohany', 'ORANGE_MONEY', '0320489612', 'col-2', 0);
 
+
+-- new data
+INSERT INTO financial_account (id, type, amount) VALUES
+    ('C3-A-BANK-1', 'BANK', 0),
+    ('C3-A-BANK-2', 'BANK', 0),
+    ('C3-A-MOBILE-1', 'MOBILE', 0);
+
+DROP TABLE bank_account;
+
+CREATE TABLE bank_account(
+    collectivity_id VARCHAR(255) REFERENCES collectivity(id),
+    id VARCHAR(255) PRIMARY KEY REFERENCES financial_account(id),
+    holder_name VARCHAR(255) NOT NULL,
+    bank_name bank_name NOT NULL,
+    bank_code INT NOT NULL,
+    bank_branch_code INT NOT NULL,
+    bank_account_key INT NOT NULL
+);
+
+
+INSERT INTO bank_account(collectivity_id, id, holder_name, bank_name, bank_code, bank_branch_code, bank_account_key) VALUES
+    ('col-3', 'C3-A-BANK-1', 'Koto', 'BMOI', 00004, 00001, 12),
+    ('col-3', 'C3-A-BANK-2', 'Naivo', 'BRED',00008, 00003, 58);
+
+INSERT INTO mobile_banking_account(id, holder_name, mobile_banking_service, mobile_number, collectivity_id, amount) VALUES
+    ('C3-A-MOBILE-1', 'Kolo', 'MVOLA', '0341889612', 'col-3', 0);
+
+INSERT INTO membership_fee(id, status, eligible_from, frequency, amount, label, collectivity_id) VALUES
+    ('cot-1', 'ACTIVE', '2026-01-01', 'ANNUALLY', 200000, 'Cotisation annuelle', 'col-1'),
+    ('cot-2', 'ACTIVE', '2026-04-30', 'PUNCTUALLY', 20000, 'Famangiana', 'col-1'),
+    ('cot-3', 'ACTIVE', '2026-01-01', 'ANNUALLY', 200000, 'Cotisation annuelle', 'col-2'),
+    ('cot-4', 'INACTIVE', '2025-01-01', 'ANNUALLY', 100000, 'Cotisation 2025', 'col-2'),
+    ('cot-5', 'ACTIVE', '2026-04-01', 'MONTHLY', 25000, 'Cotisation mensuelle', 'col-3');
+
+
+
+INSERT INTO collectivity_transaction (id, creation_date, amount, payment_mode, account_credited_id, account_credited_type, member_debited_id, collectivity_id) VALUES
+    (gen_random_uuid(), '2026-01-01', 200000, 'CASH', 'C1-A-CASH', 'CASH', 'C1-M1', 'col-1'),
+(gen_random_uuid(), '2026-01-01', 200000, 'CASH', 'C2-A-CASH', 'CASH', 'C2-M1', 'col-2'),
+(gen_random_uuid(), '2026-04-01', 25000, 'CASH', 'C3-A-CASH', 'CASH', 'C3-M1', 'col-3');
+
+
+
+
+
+INSERT INTO memberpayment (id, amount, payment_mode, id_membership_fee, account_credited, creation_date, id_member) VALUES
+(gen_random_uuid(), 200000, 'CASH', NULL, 'C1-A-CASH', '2026-01-01', 'C1-M1'),
+(gen_random_uuid(), 200000, 'CASH', NULL, 'C1-A-CASH', '2026-01-01', 'C1-M2'),
+(gen_random_uuid(), 200000, 'MOBILE_BANKING', NULL, 'C1-A-MOBILE-1', '2026-01-01', 'C1-M3'),
+(gen_random_uuid(), 200000, 'MOBILE_BANKING', NULL, 'C1-A-MOBILE-1', '2026-01-01', 'C1-M4'),
+(gen_random_uuid(), 150000, 'MOBILE_BANKING', NULL, 'C1-A-MOBILE-1', '2026-01-01', 'C1-M5'),
+(gen_random_uuid(), 100000, 'CASH', NULL, 'C1-A-CASH', '2026-05-01', 'C1-M6'),
+(gen_random_uuid(), 60000, 'CASH', NULL, 'C1-A-CASH', '2026-05-01', 'C1-M7'),
+(gen_random_uuid(), 90000, 'CASH', NULL, 'C1-A-CASH', '2026-05-01', 'C1-M8'),
+(gen_random_uuid(), 120000, 'CASH', NULL, 'C2-A-CASH', '2026-01-01', 'C2-M1'),
+(gen_random_uuid(), 180000, 'CASH', NULL, 'C2-A-CASH', '2026-01-01', 'C2-M2'),
+(gen_random_uuid(), 200000, 'CASH', NULL, 'C2-A-CASH', '2026-01-01', 'C2-M3'),
+(gen_random_uuid(), 200000, 'CASH', NULL, 'C2-A-CASH', '2026-01-01', 'C2-M4'),
+(gen_random_uuid(), 200000, 'CASH', NULL, 'C2-A-CASH', '2026-01-01', 'C2-M5'),
+(gen_random_uuid(), 200000, 'CASH', NULL, 'C2-A-CASH', '2026-01-01', 'C2-M6'),
+(gen_random_uuid(), 80000, 'MOBILE_BANKING', NULL, 'C2-A-MOBILE-1', '2026-01-01', 'C2-M7'),
+(gen_random_uuid(), 120000, 'MOBILE_BANKING', NULL, 'C2-A-MOBILE-1', '2026-01-01', 'C2-M8'),
+(gen_random_uuid(), 25000, 'BANK_TRANSFER', NULL, 'C3-A-BANK-1', '2026-04-01', 'C3-M1'),
+(gen_random_uuid(), 25000, 'BANK_TRANSFER', NULL, 'C3-A-BANK-1', '2026-04-01', 'C3-M2'),
+(gen_random_uuid(), 25000, 'BANK_TRANSFER', NULL, 'C3-A-BANK-1', '2026-04-01', 'C3-M3'),
+(gen_random_uuid(), 25000, 'BANK_TRANSFER', NULL, 'C3-A-BANK-1', '2026-04-01', 'C3-M4'),
+(gen_random_uuid(), 25000, 'BANK_TRANSFER', NULL, 'C3-A-BANK-2', '2026-04-01', 'C3-M5'),
+(gen_random_uuid(), 25000, 'BANK_TRANSFER', NULL, 'C3-A-BANK-2', '2026-04-01', 'C3-M6'),
+(gen_random_uuid(), 25000, 'CASH', NULL, 'C3-A-CASH', '2026-04-01', 'C3-M7'),
+(gen_random_uuid(), 25000, 'CASH', NULL, 'C3-A-CASH', '2026-04-01', 'C3-M8'),
+(gen_random_uuid(), 25000, 'BANK_TRANSFER', NULL, 'C3-A-BANK-1', '2026-05-01', 'C3-M1'),
+(gen_random_uuid(), 25000, 'BANK_TRANSFER', NULL, 'C3-A-BANK-1', '2026-05-01', 'C3-M2'),
+(gen_random_uuid(), 15000, 'MOBILE_BANKING', NULL, 'C3-A-MOBILE-1', '2026-05-01', 'C3-M3'),
+(gen_random_uuid(), 15000, 'MOBILE_BANKING', NULL, 'C3-A-MOBILE-1', '2026-05-01', 'C3-M4'),
+(gen_random_uuid(), 20000, 'BANK_TRANSFER', NULL, 'C3-A-BANK-2', '2026-05-01', 'C3-M5'),
+(gen_random_uuid(), 25000, 'BANK_TRANSFER', NULL, 'C3-A-BANK-2', '2026-05-01', 'C3-M6'),
+(gen_random_uuid(), 5000, 'CASH', NULL, 'C3-A-CASH', '2026-05-01', 'C3-M7'),
+(gen_random_uuid(), 5000, 'CASH', NULL, 'C3-A-CASH', '2026-05-01', 'C3-M8');
+
+
+INSERT INTO member (id, first_name, last_name, birth_date, gender, address, profession, phone_number, email, member_occupation, id_collectivity, registration_fee_paid, membership_dues_paid) VALUES
+(gen_random_uuid(), 'Jean', 'Rakoto', '1990-01-15', 'MALE', 'Lot 123 Ambatondrazaka', 'Agriculteur', 341234500, 'jean.rakoto@email.com', 'JUNIOR', 'col-1', true, false),
+(gen_random_uuid(), 'Marie', 'Razafy', '1991-02-20', 'FEMALE', 'Lot 456 Ambatondrazaka', 'Commerçante', 341234501, 'marie.razafy@email.com', 'JUNIOR', 'col-1', true, false),
+(gen_random_uuid(), 'Paul', 'Andriamanana', '1992-03-10', 'MALE', 'Lot 789 Ambatondrazaka', 'Étudiant', 341234502, 'paul.andriamanana@email.com', 'JUNIOR', 'col-1', true, false),
+(gen_random_uuid(), 'Sophie', 'Ralainasolo', '1993-04-05', 'FEMALE', 'Lot 101 Ambatondrazaka', 'Coiffeuse', 341234503, 'sophie.ralainasolo@email.com', 'JUNIOR', 'col-1', true, false),
+(gen_random_uuid(), 'Lala', 'Rakotomalala', '1990-01-15', 'FEMALE', 'Lot 202 Mahajanga', 'Enseignante', 341234504, 'lala.rakotomalala@email.com', 'JUNIOR', 'col-2', true, false),
+(gen_random_uuid(), 'Hery', 'Randrianasolo', '1991-02-20', 'MALE', 'Lot 303 Mahajanga', 'Mécanicien', 341234505, 'hery.randrianasolo@email.com', 'JUNIOR', 'col-2', true, false),
+(gen_random_uuid(), 'Mamy', 'Ravelonirina', '1992-03-10', 'MALE', 'Lot 404 Mahajanga', 'Pêcheur', 341234506, 'mamy.ravelonirina@email.com', 'JUNIOR', 'col-2', true, false),
+(gen_random_uuid(), 'Voahangy', 'Rasoanirina', '1990-01-15', 'FEMALE', 'Lot 505 Brickaville', 'Cultivatrice', 341234507, 'voahangy.rasoanirina@email.com', 'JUNIOR', 'col-3', true, false),
+(gen_random_uuid(), 'Tojo', 'Rakotovao', '1991-02-20', 'MALE', 'Lot 606 Brickaville', 'Chauffeur', 341234508, 'tojo.rakotovao@email.com', 'JUNIOR', 'col-3', true, false),
+(gen_random_uuid(), 'Nirina', 'Razanadrasoa', '1992-03-10', 'FEMALE', 'Lot 707 Brickaville', 'Vendeuse', 341234509, 'nirina.razanadrasoa@email.com', 'JUNIOR', 'col-3', true, false),
+(gen_random_uuid(), 'Faniry', 'Ratsimandresy', '1993-04-05', 'MALE', 'Lot 808 Brickaville', 'Apiculteur', 341234510, 'faniry.ratsimandresy@email.com', 'JUNIOR', 'col-3', true, false),
+(gen_random_uuid(), 'Hanta', 'Ranaivoarisoa', '1994-05-01', 'FEMALE', 'Lot 909 Brickaville', 'Artisane', 341234511, 'hanta.ranaivoarisoa@email.com', 'JUNIOR', 'col-3', true, false),
+(gen_random_uuid(), 'Tiana', 'Razafindramboa', '1995-06-15', 'FEMALE', 'Lot 100 Brickaville', 'Étudiante', 341234512, 'tiana.razafindramboa@email.com', 'JUNIOR', 'col-3', true, false);
+
+INSERT INTO collectivity_members (collectivity_id, member_id, joined_at, is_active)
+VALUES ('col-1', (SELECT id FROM member WHERE email = 'jean.rakoto@email.com'), '2026-04-01', true),
+       ('col-1', (SELECT id FROM member WHERE email = 'marie.razafy@email.com'), '2026-04-01', true),
+       ('col-1', (SELECT id FROM member WHERE email = 'paul.andriamanana@email.com'), '2026-05-01', true),
+       ('col-1', (SELECT id FROM member WHERE email = 'sophie.ralainasolo@email.com'), '2026-06-01', true),
+       ('col-2', (SELECT id FROM member WHERE email = 'lala.rakotomalala@email.com'), '2026-03-01', true),
+       ('col-2', (SELECT id FROM member WHERE email = 'hery.randrianasolo@email.com'), '2026-03-01', true),
+       ('col-2', (SELECT id FROM member WHERE email = 'mamy.ravelonirina@email.com'), '2026-03-01', true),
+       ('col-3', (SELECT id FROM member WHERE email = 'voahangy.rasoanirina@email.com'), '2026-01-01', true),
+       ('col-3', (SELECT id FROM member WHERE email = 'tojo.rakotovao@email.com'), '2026-02-01', true),
+       ('col-3', (SELECT id FROM member WHERE email = 'nirina.razanadrasoa@email.com'), '2026-02-01', true),
+       ('col-3', (SELECT id FROM member WHERE email = 'faniry.ratsimandresy@email.com'), '2026-03-01', true),
+       ('col-3', (SELECT id FROM member WHERE email = 'hanta.ranaivoarisoa@email.com'), '2026-03-01', true),
+       ('col-3', (SELECT id FROM member WHERE email = 'tiana.razafindramboa@email.com'), '2026-03-01', true);
+
+
+INSERT INTO referral (id, id_referee, id_referred)
+VALUES (gen_random_uuid(), 'C1-M1', (SELECT id FROM member WHERE email = 'jean.rakoto@email.com')),
+       (gen_random_uuid(), 'C1-M2', (SELECT id FROM member WHERE email = 'jean.rakoto@email.com')),
+       (gen_random_uuid(), 'C1-M1', (SELECT id FROM member WHERE email = 'marie.razafy@email.com')),
+       (gen_random_uuid(), 'C1-M2', (SELECT id FROM member WHERE email = 'marie.razafy@email.com')),
+       (gen_random_uuid(), 'C1-M1', (SELECT id FROM member WHERE email = 'paul.andriamanana@email.com')),
+       (gen_random_uuid(), 'C1-M2', (SELECT id FROM member WHERE email = 'paul.andriamanana@email.com')),
+       (gen_random_uuid(), 'C1-M1', (SELECT id FROM member WHERE email = 'sophie.ralainasolo@email.com')),
+       (gen_random_uuid(), 'C1-M2', (SELECT id FROM member WHERE email = 'sophie.ralainasolo@email.com')),
+       (gen_random_uuid(), 'C1-M1', (SELECT id FROM member WHERE email = 'lala.rakotomalala@email.com')),
+       (gen_random_uuid(), 'C1-M2', (SELECT id FROM member WHERE email = 'lala.rakotomalala@email.com')),
+       (gen_random_uuid(), 'C1-M1', (SELECT id FROM member WHERE email = 'hery.randrianasolo@email.com')),
+       (gen_random_uuid(), 'C1-M2', (SELECT id FROM member WHERE email = 'hery.randrianasolo@email.com')),
+       (gen_random_uuid(), 'C1-M1', (SELECT id FROM member WHERE email = 'mamy.ravelonirina@email.com')),
+       (gen_random_uuid(), 'C1-M2', (SELECT id FROM member WHERE email = 'mamy.ravelonirina@email.com')),
+       (gen_random_uuid(), 'C3-M1', (SELECT id FROM member WHERE email = 'voahangy.rasoanirina@email.com')),
+       (gen_random_uuid(), 'C3-M2', (SELECT id FROM member WHERE email = 'voahangy.rasoanirina@email.com')),
+       (gen_random_uuid(), 'C3-M1', (SELECT id FROM member WHERE email = 'tojo.rakotovao@email.com')),
+       (gen_random_uuid(), 'C3-M2', (SELECT id FROM member WHERE email = 'tojo.rakotovao@email.com')),
+       (gen_random_uuid(), 'C3-M1', (SELECT id FROM member WHERE email = 'nirina.razanadrasoa@email.com')),
+       (gen_random_uuid(), 'C3-M2', (SELECT id FROM member WHERE email = 'nirina.razanadrasoa@email.com')),
+       (gen_random_uuid(), 'C3-M1', (SELECT id FROM member WHERE email = 'faniry.ratsimandresy@email.com')),
+       (gen_random_uuid(), 'C3-M2', (SELECT id FROM member WHERE email = 'faniry.ratsimandresy@email.com')),
+       (gen_random_uuid(), 'C3-M1', (SELECT id FROM member WHERE email = 'hanta.ranaivoarisoa@email.com')),
+       (gen_random_uuid(), 'C3-M2', (SELECT id FROM member WHERE email = 'hanta.ranaivoarisoa@email.com')),
+       (gen_random_uuid(), 'C3-M1', (SELECT id FROM member WHERE email = 'tiana.razafindramboa@email.com')),
+       (gen_random_uuid(), 'C3-M2', (SELECT id FROM member WHERE email = 'tiana.razafindramboa@email.com'));

@@ -83,9 +83,8 @@ public class CollectivityActivityRepository {
                             }
                             collectivityActivity.setMemberOccupationConcerned(occupationList);
                             MonthlyRecurrenceRule monthlyRecurrenceRule = new MonthlyRecurrenceRule();
-                            monthlyRecurrenceRule.setWeekOrdinal(resultSet.getInt("week_ordinal"));
-                            String dayOfWeek = resultSet.getString("day_of_week");
-                            monthlyRecurrenceRule.setDayOfWeek(dayOfWeek == null ? null : DaysEnum.valueOf(dayOfWeek));
+                            monthlyRecurrenceRule.setWeekOrdinal(activity.getMonthlyRecurrenceRule().getWeekOrdinal());
+                            monthlyRecurrenceRule.setDayOfWeek(activity.getMonthlyRecurrenceRule().getDayOfWeek());
                             collectivityActivity.setMonthlyRecurrenceRule(monthlyRecurrenceRule);
                             addedActivityList.add(collectivityActivity);
                         }

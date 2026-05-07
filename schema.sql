@@ -166,6 +166,9 @@ CREATE TABLE activity_attendance (
     PRIMARY KEY (id_member, id_activity)
 );
 
+ALTER TABLE activity_attendance
+    ADD COLUMN id VARCHAR(255) UNIQUE;
+
 DELETE FROM collectivity_transaction;
 DELETE FROM memberpayment;
 DELETE FROM membership_fee;

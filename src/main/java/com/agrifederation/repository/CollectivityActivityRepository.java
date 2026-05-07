@@ -1,9 +1,7 @@
 package com.agrifederation.repository;
 
 import com.agrifederation.config.DatabaseConfig;
-import com.agrifederation.dto.ActivityMemberAttendanceDTO;
-import com.agrifederation.dto.ActivityRequest;
-import com.agrifederation.dto.MemberDescriptionDTO;
+import com.agrifederation.dto.*;
 import com.agrifederation.entity.ActivityMemberAttendance;
 import com.agrifederation.entity.CollectivityActivity;
 import com.agrifederation.entity.MonthlyRecurrenceRule;
@@ -192,6 +190,58 @@ public class CollectivityActivityRepository {
         return attendanceList;
     }
 
+    public List<AttendanceResponse> confirmMemberAttendance(String activityId, List<AttendanceRequest> attendanceList ) {
+        List<AttendanceResponse> attendanceResponseList = new ArrayList<>();
+        String query = """
+                INSERT INTO (id_member, id_activity, status, id)
+                VALUES (?, ?, ?::attendance_status, ?)
+                RETURNING id;
+                """;
 
+        String returnQuery = """
+                SELECT first_name, last_name, email, member_occupation FROM member
+                WHERE id = ?
+                """;
+        try (Connection connection = databaseConfig.getConnection()) {
+            connection.setAutoCommit(false);
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query);
+                 PreparedStatement returnStmt = connection.prepareStatement(returnQuery)) {
+                for (AttendanceRequest attendanceRequest : attendanceList) {
+                    preparedStatement.setString(1, attendanceRequest.getMemberIdentifier());
+                    preparedStatement.setString(2, activityId);
+                    preparedStatement.setString(3, attendanceRequest.getAttendanceStatus().name());
+                    preparedStatement.setString(4, UUID.randomUUID().toString());
+                    ResultSet resultSet = preparedStatement.executeQuery();
+                    while (resultSet.next()) {
+                        String id = resultSet.getString("id");
+                        returnStmt.setString(1, id);
+                        ResultSet memberResultSet = returnStmt.executeQuery();
 
+                        if (memberResultSet.next()) {
+                            AttendanceResponse attendanceResponse = new AttendanceResponse();
+                            attendanceResponse.setId(id);
+                            MemberDescriptionDTO member = new MemberDescriptionDTO();
+                            member.setId(id);
+                            member.setFirstName(memberResultSet.getString("first_name"));
+                            member.setLastName(memberResultSet.getString("last_name"));
+                            member.setEmail(memberResultSet.getString("email"));
+                            String occupation = memberResultSet.getString("member_occupation");
+                            member.setOccupation(occupation == null ? null : Occupation.valueOf(occupation));
+                            attendanceResponse.setMemberDescription(member);
+                            attendanceResponse.setAttendanceStatus(id);
+                            attendanceResponseList.add(attendanceResponse);
+                        }
+                    }
+                }
+                connection.commit();
+            } catch (SQLException e) {
+                connection.rollback();
+                throw new RuntimeException(e);
+            }
+            return attendanceResponseList;
+        }
+        catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

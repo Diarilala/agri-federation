@@ -25,16 +25,18 @@ public class CollectivityActivityRepository {
         String activityQuery = """
                 INSERT INTO collectivity_activity (id, label, activity_type,
                 executive_date, id_collectivity, id_monthly_recurrence) VALUES(?, ?, ?::activity_type, ?, ?, ?)
-                RETURNING id AS id_activity;
+                RETURNING id AS id_activity, label,  activity_type, executive_date, id_collectivity;
                 """;
 
         String activityOccupationQuery = """
                 INSERT INTO activity_occupation (id_activity, occupation) VALUES(?, ?)
+                RETURNING occupation;
                 """;
 
         String monthly_recurrence = """
                 INSERT INTO monthly_recurrence_rule(id, week_ordinal, day_of_week)
                 VALUES(?, ?, ?::days)
+                RETURNING week_ordinal, day_of_week;
                 """;
         List<CollectivityActivity> addedActivityList = new ArrayList<>();
         try (Connection connection = databaseConfig.getConnection()) {
@@ -68,6 +70,8 @@ public class CollectivityActivityRepository {
                         collectivityActivity.setLabel(resultSet.getString("label"));
                         String activityType = resultSet.getString("activity_type");
                         collectivityActivity.setActivityType(activityType == null ? null : Type.valueOf(activityType));
+                        collectivityActivity.setExecutiveDate(LocalDate.parse("executive_date"));
+                        collectivityActivity.setIdCollectivity("id_collectivity");
                         List<Occupation> occupationList = new ArrayList<>();
                         String returnedId = resultSet.getString("id_activity");
                         if(activity.getMemberOccupationConcerned() != null && !activity.getMemberOccupationConcerned().isEmpty()) {
@@ -78,6 +82,13 @@ public class CollectivityActivityRepository {
                                 occupationList.add(occupation);
                             }
                         }
+                        collectivityActivity.setMemberOccupationConcerned(occupationList);
+                        MonthlyRecurrenceRule monthlyRecurrenceRule = new MonthlyRecurrenceRule();
+                        monthlyRecurrenceRule.setWeekOrdinal(resultSet.getInt("week_ordinal"));
+                        String dayOfWeek = resultSet.getString("day_of_week");
+                        monthlyRecurrenceRule.setDayOfWeek(dayOfWeek == null ? null : DaysEnum.valueOf(dayOfWeek));
+                        collectivityActivity.setMonthlyRecurrenceRule(monthlyRecurrenceRule);
+                        addedActivityList.add(collectivityActivity);
                     }
                 }
                 activityOccupationStmt.executeBatch();
